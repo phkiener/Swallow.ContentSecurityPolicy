@@ -5,14 +5,14 @@ using Swallow.ContentSecurityPolicy.Tests.Framework;
 namespace Swallow.ContentSecurityPolicy.Tests;
 
 [InheritsTests]
-public sealed class BaseUriDirectiveTest : FetchDirectiveTestBase<BaseUriDirective>
+public sealed class ManifestSourceDirectiveTest : FetchDirectiveTestBase<ManifestSourceDirective>
 {
-    protected override string Name => "base-uri";
+    protected override string Name => "manifest-src";
 
-    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<BaseUriDirective> expression)
-        => policy.BaseUri = [expression];
+    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<ManifestSourceDirective> expression)
+        => policy.ManifestSource = [expression];
 
-    protected override IEnumerable<ITestCase<IAppliesTo<BaseUriDirective>>> EnumerateTestCases()
+    protected override IEnumerable<ITestCase<IAppliesTo<ManifestSourceDirective>>> EnumerateTestCases()
     {
         yield return TestCases.For<DenyAll>();
         yield return TestCases.For<HostSource>();

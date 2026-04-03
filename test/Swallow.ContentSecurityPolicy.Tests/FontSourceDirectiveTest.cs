@@ -5,14 +5,14 @@ using Swallow.ContentSecurityPolicy.Tests.Framework;
 namespace Swallow.ContentSecurityPolicy.Tests;
 
 [InheritsTests]
-public sealed class BaseUriDirectiveTest : FetchDirectiveTestBase<BaseUriDirective>
+public sealed class FontSourceDirectiveTest : FetchDirectiveTestBase<FontSourceDirective>
 {
-    protected override string Name => "base-uri";
+    protected override string Name => "font-src";
 
-    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<BaseUriDirective> expression)
-        => policy.BaseUri = [expression];
+    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<FontSourceDirective> expression)
+        => policy.FontSource = [expression];
 
-    protected override IEnumerable<ITestCase<IAppliesTo<BaseUriDirective>>> EnumerateTestCases()
+    protected override IEnumerable<ITestCase<IAppliesTo<FontSourceDirective>>> EnumerateTestCases()
     {
         yield return TestCases.For<DenyAll>();
         yield return TestCases.For<HostSource>();
