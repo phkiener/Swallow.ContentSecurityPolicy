@@ -1,13 +1,44 @@
 <Project>
   <PropertyGroup>
+
+    <!-- General options -->
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <!-- Build options -->
+    <IsAotCompatible>true</IsAotCompatible>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <WarningsAsErrors>true</WarningsAsErrors>
+
+    <ContinuousIntegrationBuild Condition="$(CI) == 'true'">true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
+
+    <!-- NuGet options -->
+    <IsPackable>true</IsPackable>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <IsAotCompatible>true</IsAotCompatible>
+    <Authors>Philipp Kiener</Authors>
+    <Copyright>2026 Philipp Kiener</Copyright>
+    <PackageProjectUrl>https://github.com/phkiener/Swallow.ContentSecurityPolicy</PackageProjectUrl>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>aspnetcore;csp;content-security-policy;</PackageTags>
+    <Description>Convenient integration for a Content Security Policy (CSP) in your ASP.NET host.</Description>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/phkiener/Swallow.ContentSecurityPolicy</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Always included files -->
+    <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../icon.png" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
 </Project>
