@@ -14,6 +14,12 @@ public sealed partial class ContentSecurityPolicy
     public IEnumerable<Directive> Directives => directives.Values.AsEnumerable();
 
     /// <summary>
+    /// When <see langword="true"/>, the policy will not actually block any resources, but will send a report.
+    /// </summary>
+    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy-Report-Only">Content-Security-Policy-Report-Only on MDN</seealso>
+    public bool ReportOnly { get; set; } = false;
+
+    /// <summary>
     /// Add a <see cref="Directive"/> to the list of directives.
     /// </summary>
     /// <remarks>

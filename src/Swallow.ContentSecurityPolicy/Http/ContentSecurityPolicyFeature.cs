@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
@@ -28,8 +29,10 @@ public sealed class ContentSecurityPolicyFeature(string nonce)
             return;
         }
 
+        var targetHeader = Current.ReportOnly ? HeaderNames.ContentSecurityPolicyReportOnly : HeaderNames.ContentSecurityPolicy;
         var directives = Current.Directives.Select(AsHeaderValue);
-        headerDictionary.ContentSecurityPolicy = string.Join("; ", directives);
+
+        headerDictionary[targetHeader] = string.Join("; ", directives);
     }
 
     private string AsHeaderValue(Directive directive)
