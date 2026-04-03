@@ -1,5 +1,4 @@
 using System.Collections;
-using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
@@ -43,13 +42,5 @@ public abstract class FetchDirective(string name) : Directive, IEnumerable<ISour
     IEnumerator IEnumerable.GetEnumerator()
     {
         return sourceExpressions.GetEnumerator();
-    }
-}
-
-public abstract class FetchDirective<T>(string name) : FetchDirective(name) where T : FetchDirective<T>
-{
-    public void Add(IAppliesTo<T> sourceExpression)
-    {
-        base.Add(sourceExpression);
     }
 }

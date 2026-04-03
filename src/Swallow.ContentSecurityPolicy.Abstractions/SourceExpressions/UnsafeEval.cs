@@ -1,5 +1,3 @@
-using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
-
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
 public sealed class UnsafeEval : SourceExpression, IAppliesTo<DefaultSourceDirective>

@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 

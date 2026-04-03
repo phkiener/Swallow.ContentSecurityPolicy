@@ -1,5 +1,3 @@
-using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
-
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
 public sealed class Hash(Hash.Algorithm algorithm, string hashedValue) : SourceExpression, IAppliesTo<DefaultSourceDirective>
