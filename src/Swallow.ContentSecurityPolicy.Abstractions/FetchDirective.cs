@@ -1,13 +1,23 @@
 using System.Collections;
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
+/// <summary>
+/// A <see cref="Directive"/> that is related to the fetching of resources.
+/// </summary>
+/// <param name="name">Name of the directive.</param>
 public abstract class FetchDirective(string name) : Directive(name), IEnumerable<ISourceExpression>
 {
     private readonly List<ISourceExpression> sourceExpressions = [];
 
+    /// <inheritdoc />
     public sealed override IEnumerable<ISourceExpression> Expressions => EnumerateExpressions();
 
+    /// <summary>
+    /// Add an expression to this directive.
+    /// </summary>
+    /// <param name="sourceExpression">The <see cref="ISourceExpression"/> to add.</param>
     protected void Add(ISourceExpression sourceExpression)
     {
         sourceExpressions.Add(sourceExpression);

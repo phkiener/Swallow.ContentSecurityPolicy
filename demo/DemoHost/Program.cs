@@ -2,6 +2,7 @@ using System.Text.Json;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Http;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
 namespace Swallow.ContentSecurityPolicy.Http;
 
