@@ -1,9 +1,10 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
 public sealed class HostSource(string hostString) : SourceExpression,
-    IAppliesTo<DefaultSourceDirective>,
+    IAppliesTo<BaseUriDirective>,
     IAppliesTo<ChildSourceDirective>,
     IAppliesTo<ConnectSourceDirective>,
+    IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<FontSourceDirective>,
     IAppliesTo<FormActionDirective>,
     IAppliesTo<FrameAncestorsDirective>,

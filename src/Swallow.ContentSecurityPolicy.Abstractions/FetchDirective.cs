@@ -2,11 +2,10 @@ using System.Collections;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public abstract class FetchDirective(string name) : Directive, IEnumerable<ISourceExpression>
+public abstract class FetchDirective(string name) : Directive(name), IEnumerable<ISourceExpression>
 {
     private readonly List<ISourceExpression> sourceExpressions = [];
 
-    public sealed override string Name { get; } = name;
     public sealed override IEnumerable<ISourceExpression> Expressions => EnumerateExpressions();
 
     protected void Add(ISourceExpression sourceExpression)

@@ -4,6 +4,12 @@ namespace Swallow.ContentSecurityPolicy.Abstractions;
 
 public sealed partial class ContentSecurityPolicy
 {
+    public BaseUriDirective? BaseUri
+    {
+        get => GetSpecific<BaseUriDirective>(BaseUriDirective.Name);
+        set => SetOrRemove(BaseUriDirective.Name, value);
+    }
+
     public ChildSourceDirective? ChildSource
     {
         get => GetSpecific<ChildSourceDirective>(ChildSourceDirective.Name);
@@ -104,6 +110,12 @@ public sealed partial class ContentSecurityPolicy
     {
         get => GetSpecific<StyleSourceElementDirective>(StyleSourceElementDirective.Name);
         set => SetOrRemove(StyleSourceElementDirective.Name, value);
+    }
+
+    public UpgradeInsecureRequestsDirective? UpgradeInsecureRequests
+    {
+        get => GetSpecific<UpgradeInsecureRequestsDirective>(UpgradeInsecureRequestsDirective.Name);
+        set => SetOrRemove(UpgradeInsecureRequestsDirective.Name, value);
     }
 
     public WorkerSourceDirective? WorkerSource

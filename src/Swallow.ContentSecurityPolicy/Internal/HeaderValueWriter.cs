@@ -21,6 +21,8 @@ internal static class HeaderValueWriter
 
     private static string AsHeaderValue(Directive directive)
     {
-        return $"{directive.Name} {string.Join(" ", directive.Expressions.Select(static e => e.Value))}";
+        return directive.Expressions.Any()
+            ? $"{directive.Name} {string.Join(" ", directive.Expressions.Select(static e => e.Value))}"
+            : directive.Name;
     }
 }
