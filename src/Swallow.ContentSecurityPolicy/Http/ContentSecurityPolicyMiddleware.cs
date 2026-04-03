@@ -9,13 +9,15 @@ public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPoli
 {
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        context.Response.OnStarting(WriteHeader, context);
+
+        var feature = new ContentSecurityPolicyFeature();
+        context.Features.Set(feature);
+
         var defaultPolicy = options.Value.DefaultPolicy;
         if (defaultPolicy is not null)
         {
-            context.Response.OnStarting(WriteHeader, context);
-
-            var feature = new ContentSecurityPolicyFeature(defaultPolicy);
-            context.Features.Set(feature);
+            feature.Current = defaultPolicy;
         }
 
         return next(context);
@@ -31,7 +33,7 @@ public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPoli
         var feature = context.ContentSecurityPolicy;
         if (feature?.Current is { } policy)
         {
-            HeaderValueWriter.SetHeader(context.Response.Headers, policy);
+            HeaderValueWriter.SetHeader(context.Response.Headers, policy, feature.Nonce);
         }
 
         return Task.CompletedTask;
