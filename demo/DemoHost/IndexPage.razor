@@ -1,0 +1,22 @@
+@page "/"
+@using Swallow.ContentSecurityPolicy.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>CSP Example</title>
+    <script src="@Assets["script-1.js"]" nonce="@HttpContextAccessor.HttpContext?.CspNonce" async></script>
+    <script src="@Assets["script-2.js"]" async></script>
+
+    <style>
+        .loaded { color: green; }
+    </style>
+</head>
+<body>
+<ul>
+    <li id="script-1">script-1.js</li>
+    <li id="script-2">script-2.js</li>
+</ul>
+</body>
+</html>

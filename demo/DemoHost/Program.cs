@@ -1,4 +1,6 @@
 using DemoHost;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
@@ -9,20 +11,33 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
+builder.Services.AddRazorComponents();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddContentSecurityPolicy()
-    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()], ReportOnly = true })
+    .SetPolicy(new ContentSecurityPolicy
+    {
+        DefaultSource = [Self.Instance],
+        ScriptSource = [Nonce.Instance],
+        StyleSourceElement = [UnsafeInline.Instance]
+    })
     .UseReportHandler<ReportHandler>();
 
 var app = builder.Build();
 
+StaticWebAssetsLoader.UseStaticWebAssets(app.Environment, app.Configuration);
+app.MapStaticAssets();
+
+app.UseHttpsRedirection();
 app.UseContentSecurityPolicy();
 app.MapContentSecurityPolicyReports(route: "_framework/csp/handle-report");
 
-app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
-app.MapGet("/deny-all", ctx =>
+app.MapGet("/", () => new RazorComponentResult<IndexPage>());
+app.MapGet("/nonce", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
+app.MapGet("/changed-policy", ctx =>
 {
     ctx.ContentSecurityPolicy?.DefaultSource = [DenyAll.Instance];
     return ctx.Response.WriteAsync("You can't load anything!");
 });
+
 
 app.Run();

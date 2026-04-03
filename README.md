@@ -96,6 +96,11 @@ app.MapContentSecurityPolicyReports();
 app.MapContentSecurityPolicyReports(route: "_reports/csp/violation");
 ```
 
+This uses the `IHttpContextAccessor` to retrieve the current `HttpContext` to
+generate the correct URL, but it also works without it. You can also generate
+the URL yourself by calling `LinkGenerator.GetPathByName` and passing
+`ConentSecurityPolicy.ReportingEndpointName` as the endpoint name.
+
 The report handler itself can be fairly simple:
 
 ```csharp

@@ -107,6 +107,7 @@ public sealed class CSPViolationReport
     /// Whether the CSP was enforced or only sent a report.
     /// </summary>
     /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport/disposition">Disposition on MDN</seealso>
+    [JsonConverter(typeof(JsonStringEnumConverter<Disposition>))]
     public enum Disposition
     {
         /// <summary>
@@ -121,6 +122,7 @@ public sealed class CSPViolationReport
     }
 }
 
-[JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<CSPViolationReport.Disposition>)])]
+[JsonSourceGenerationOptions]
 [JsonSerializable(typeof(CSPViolationReport))]
+[JsonSerializable(typeof(CSPViolationReport[]))]
 internal partial class CspViolationReportSourceGenerationContext : JsonSerializerContext;

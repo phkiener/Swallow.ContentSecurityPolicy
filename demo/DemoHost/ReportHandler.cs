@@ -1,12 +1,16 @@
+using System.Text.Json;
 using Swallow.ContentSecurityPolicy.Reports;
 
 namespace DemoHost;
 
 public sealed class ReportHandler(ILogger<ReportHandler> logger) : IReportHandler
 {
-    public Task Handle(CSPViolationReport violationReport, CancellationToken cancellationToken)
+    public Task Handle(CSPViolationReport[] violationReports, CancellationToken cancellationToken)
     {
-        logger.LogWarning("CSP Violation {Report}", violationReport);
+        foreach (var report in violationReports)
+        {
+            logger.LogWarning("CSP Violation {Report}", JsonSerializer.Serialize(report));
+        }
 
         return Task.CompletedTask;
     }

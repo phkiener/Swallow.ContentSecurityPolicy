@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,16 +21,19 @@ internal sealed class ReportHandlerInvoker(ILogger<ReportHandlerInvoker> logger,
 
         if (context.Request.ContentType is "application/reports+json")
         {
-            var violation = await context.Request.ReadFromJsonAsync<CSPViolationReport>(CspViolationReportSourceGenerationContext.Default.CSPViolationReport);
-            if (violation is not null)
+            var jsonElement = await context.Request.ReadFromJsonAsync<JsonElement>(context.RequestAborted);
+            var violations = jsonElement.ValueKind is JsonValueKind.Array
+                ? jsonElement.Deserialize(CspViolationReportSourceGenerationContext.Default.CSPViolationReportArray)
+                : [jsonElement.Deserialize(CspViolationReportSourceGenerationContext.Default.CSPViolationReport)];
+
+            if (violations is not (null or []))
             {
                 foreach (var handler in handlers)
                 {
-                    await handler.Handle(violation, context.RequestAborted);
+                    await handler.Handle(violations, context.RequestAborted);
                 }
             }
         }
-
     }
 
     public static Task Delegate(HttpContext context)
