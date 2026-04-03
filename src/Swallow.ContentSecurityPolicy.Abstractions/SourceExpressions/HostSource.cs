@@ -12,6 +12,8 @@ public sealed class HostSource(string hostString) : SourceExpression,
     IAppliesTo<ManifestSourceDirective>,
     IAppliesTo<MediaSourceDirective>,
     IAppliesTo<ObjectSourceDirective>,
+    IAppliesTo<ScriptSourceDirective>,
+    IAppliesTo<StyleSourceDirective>,
     IAppliesTo<WorkerSourceDirective>
 {
     public override string Value { get; } = hostString;

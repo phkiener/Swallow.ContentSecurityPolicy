@@ -12,6 +12,8 @@ public sealed class Self : SourceExpression,
     IAppliesTo<ManifestSourceDirective>,
     IAppliesTo<MediaSourceDirective>,
     IAppliesTo<ObjectSourceDirective>,
+    IAppliesTo<ScriptSourceDirective>,
+    IAppliesTo<StyleSourceDirective>,
     IAppliesTo<WorkerSourceDirective>
 {
     public static readonly Self Instance = new();

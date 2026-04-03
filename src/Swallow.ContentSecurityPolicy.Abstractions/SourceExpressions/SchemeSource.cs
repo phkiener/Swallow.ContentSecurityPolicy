@@ -12,6 +12,8 @@ public sealed class SchemeSource(string scheme) : SourceExpression,
     IAppliesTo<ManifestSourceDirective>,
     IAppliesTo<MediaSourceDirective>,
     IAppliesTo<ObjectSourceDirective>,
+    IAppliesTo<ScriptSourceDirective>,
+    IAppliesTo<StyleSourceDirective>,
     IAppliesTo<WorkerSourceDirective>
 {
     public string Scheme { get; } = scheme;
