@@ -1,7 +1,5 @@
-using System.Text.Json;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
-using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Http;
 
@@ -13,10 +11,9 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
 var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()] };
 builder.Services.AddContentSecurityPolicy().SetDefaultPolicy(policy);
 
-var options = new JsonSerializerOptions { WriteIndented = true };
 var app = builder.Build();
 
 app.UseContentSecurityPolicy();
-app.MapGet("/", ctx => Results.Json(ctx.ContentSecurityPolicy, options: options).ExecuteAsync(ctx));
+app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
 
 app.Run();

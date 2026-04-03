@@ -6,6 +6,7 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 /// Set the containing <see cref="Directive"/> to allow resources using a given scheme.
 /// </summary>
 /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#scheme-source">scheme-source on MDN</seealso>
+/// <param name="scheme">The scheme to allow.</param>
 public sealed class SchemeSource(string scheme) : SourceExpression,
     IAppliesTo<BaseUriDirective>,
     IAppliesTo<ChildSourceDirective>,
