@@ -15,5 +15,10 @@ var app = builder.Build();
 
 app.UseContentSecurityPolicy();
 app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
+app.MapGet("/deny-all", ctx =>
+{
+    ctx.ContentSecurityPolicy?.DefaultSource = [DenyAll.Instance];
+    return ctx.Response.WriteAsync("You can't load anything!");
+});
 
 app.Run();
