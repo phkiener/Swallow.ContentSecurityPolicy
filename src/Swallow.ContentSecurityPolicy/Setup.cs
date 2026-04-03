@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Swallow.ContentSecurityPolicy.Configuration;
 using Swallow.ContentSecurityPolicy.Http;
+using Swallow.ContentSecurityPolicy.Internal;
 
 namespace Swallow.ContentSecurityPolicy;
 
@@ -16,12 +18,13 @@ public static class Setup
     {
         services.AddSingleton<ContentSecurityPolicyMarker>();
         services.AddOptions<ContentSecurityPolicyOptions>();
-        services.AddTransient<ContentSecurityPolicyMiddleware>();
-
         if (configure is not null)
         {
             services.Configure(configure);
         }
+
+        services.TryAddScoped<INonceGenerator, GuidNonceGenerator>();
+        services.AddTransient<ContentSecurityPolicyMiddleware>();
 
         return new ContentSecurityPolicyConfiguration(services);
     }
