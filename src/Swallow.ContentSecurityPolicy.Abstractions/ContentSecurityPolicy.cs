@@ -26,6 +26,12 @@ public sealed class ContentSecurityPolicy
         set => SetOrRemove(ConnectSourceDirective.Name, value);
     }
 
+    public FontSourceDirective? FontSource
+    {
+        get => GetSpecific<FontSourceDirective>(FontSourceDirective.Name);
+        set => SetOrRemove(FontSourceDirective.Name, value);
+    }
+
     public void Add(Directive directive)
     {
         directives[directive.Name] = directive;
