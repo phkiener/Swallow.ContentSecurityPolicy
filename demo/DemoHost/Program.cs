@@ -9,7 +9,7 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
-var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce("schnitzel")], StyleSource = [new Nonce("pommes")] };
+var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()] };
 builder.Services.AddContentSecurityPolicy().SetDefaultPolicy(policy);
 
 var options = new JsonSerializerOptions { WriteIndented = true };

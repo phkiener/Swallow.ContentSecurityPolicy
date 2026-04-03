@@ -76,10 +76,34 @@ public sealed partial class ContentSecurityPolicy
         set => SetOrRemove(ScriptSourceDirective.Name, value);
     }
 
+    public ScriptSourceAttributeDirective? ScriptSourceAttribute
+    {
+        get => GetSpecific<ScriptSourceAttributeDirective>(ScriptSourceAttributeDirective.Name);
+        set => SetOrRemove(ScriptSourceAttributeDirective.Name, value);
+    }
+
+    public ScriptSourceElementDirective? ScriptSourceElement
+    {
+        get => GetSpecific<ScriptSourceElementDirective>(ScriptSourceElementDirective.Name);
+        set => SetOrRemove(ScriptSourceElementDirective.Name, value);
+    }
+
     public StyleSourceDirective? StyleSource
     {
         get => GetSpecific<StyleSourceDirective>(StyleSourceDirective.Name);
         set => SetOrRemove(StyleSourceDirective.Name, value);
+    }
+
+    public StyleSourceAttributeDirective? StyleSourceAttribute
+    {
+        get => GetSpecific<StyleSourceAttributeDirective>(StyleSourceAttributeDirective.Name);
+        set => SetOrRemove(StyleSourceAttributeDirective.Name, value);
+    }
+
+    public StyleSourceElementDirective? StyleSourceElement
+    {
+        get => GetSpecific<StyleSourceElementDirective>(StyleSourceElementDirective.Name);
+        set => SetOrRemove(StyleSourceElementDirective.Name, value);
     }
 
     public WorkerSourceDirective? WorkerSource

@@ -13,7 +13,9 @@ public sealed class DenyAll : SourceExpression,
     IAppliesTo<MediaSourceDirective>,
     IAppliesTo<ObjectSourceDirective>,
     IAppliesTo<ScriptSourceDirective>,
+    IAppliesTo<ScriptSourceElementDirective>,
     IAppliesTo<StyleSourceDirective>,
+    IAppliesTo<StyleSourceElementDirective>,
     IAppliesTo<WorkerSourceDirective>
 {
     public static readonly DenyAll Instance = new();

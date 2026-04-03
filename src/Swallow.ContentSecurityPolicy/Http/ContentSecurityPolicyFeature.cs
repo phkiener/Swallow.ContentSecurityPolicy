@@ -11,8 +11,8 @@ public sealed class ContentSecurityPolicyFeature()
 
     public Abstractions.ContentSecurityPolicy? Current { get; set; }
 
-    public string? ScriptNonce => GetNonce(static c => c.ScriptSource, static c => c.DefaultSource);
-    public string? StyleNonce => GetNonce(static c => c.StyleSource, static c => c.DefaultSource);
+    public string? ScriptNonce => GetNonce(static c => c.ScriptSourceElement, static c => c.ScriptSource, static c => c.DefaultSource);
+    public string? StyleNonce => GetNonce(static c => c.StyleSourceElement, static c => c.StyleSource, static c => c.DefaultSource);
 
     private string? GetNonce(params Func<Abstractions.ContentSecurityPolicy, FetchDirective?>[] directives)
     {

@@ -3,7 +3,9 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 public sealed class UnsafeHashes : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ScriptSourceDirective>,
-    IAppliesTo<StyleSourceDirective>
+    IAppliesTo<ScriptSourceAttributeDirective>,
+    IAppliesTo<StyleSourceDirective>,
+    IAppliesTo<StyleSourceAttributeDirective>
 {
     public static readonly UnsafeHashes Instance = new();
 

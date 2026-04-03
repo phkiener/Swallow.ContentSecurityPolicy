@@ -5,7 +5,9 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 public sealed class Nonce : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ScriptSourceDirective>,
-    IAppliesTo<StyleSourceDirective>
+    IAppliesTo<ScriptSourceElementDirective>,
+    IAppliesTo<StyleSourceDirective>,
+    IAppliesTo<StyleSourceElementDirective>
 {
     private static readonly FrozenSet<char> Base64Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".ToFrozenSet();
     private static readonly FrozenSet<char> Base64UrlAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".ToFrozenSet();

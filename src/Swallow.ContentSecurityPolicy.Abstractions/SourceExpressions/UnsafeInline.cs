@@ -3,7 +3,11 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 public sealed class UnsafeInline : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ScriptSourceDirective>,
-    IAppliesTo<StyleSourceDirective>
+    IAppliesTo<ScriptSourceAttributeDirective>,
+    IAppliesTo<ScriptSourceElementDirective>,
+    IAppliesTo<StyleSourceDirective>,
+    IAppliesTo<StyleSourceAttributeDirective>,
+    IAppliesTo<StyleSourceElementDirective>
 {
     public static readonly UnsafeInline Instance = new();
 
