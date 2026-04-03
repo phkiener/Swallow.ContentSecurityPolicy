@@ -7,6 +7,11 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 public sealed class UpgradeInsecureRequestsDirective() : Directive(Name)
 {
     /// <summary>
+    /// A shared instance of the <see cref="UpgradeInsecureRequestsDirective"/>.
+    /// </summary>
+    public static readonly UpgradeInsecureRequestsDirective Instance = new();
+
+    /// <summary>
     /// Name of the directive.
     /// </summary>
     public new const string Name = "upgrade-insecure-requests";
