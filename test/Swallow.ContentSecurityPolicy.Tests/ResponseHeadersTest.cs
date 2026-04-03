@@ -125,11 +125,33 @@ public sealed class ResponseHeadersTest
         await Assert.That(reportingEndpointsHeader).IsEqualTo("csp-reports=\"/_custom-endpoint\"");
     }
 
+    [Test]
+    public async Task WithCustomNonceGenerator_UsesGeneratedNonce()
+    {
+        var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
+
+        await using var host = TestableHost.Start(
+            s => s.AddSingleton<INonceGenerator, MockNonceGenerator>()
+                .AddContentSecurityPolicy()
+                .SetPolicy(policy));
+
+        using var client = host.CreateClient();
+        using var response = await client.GetAsync("/");
+
+        var contentSecurityPolicyHeader = response.Headers.GetValues(HeaderNames.ContentSecurityPolicy).FirstOrDefault();
+        await Assert.That(contentSecurityPolicyHeader).IsEqualTo($"default-src 'nonce-{Assertion.TestNonce}'");
+    }
+
     private sealed class MockReportHandler : IReportHandler
     {
         public Task Handle(CSPViolationReport[] violationReports, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
+    }
+
+    private sealed class MockNonceGenerator : INonceGenerator
+    {
+        public string Generate() => Assertion.TestNonce;
     }
 }
