@@ -1,7 +1,7 @@
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
 
-namespace Swallow.ContentSecurityPolicy.Tests;
+namespace Swallow.ContentSecurityPolicy.Tests.Directives;
 
 public sealed class UpgradeInsecureRequestsDirectiveTest
 {

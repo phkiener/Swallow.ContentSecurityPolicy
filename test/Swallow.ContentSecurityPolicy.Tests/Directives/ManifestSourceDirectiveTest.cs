@@ -2,7 +2,7 @@ using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
 
-namespace Swallow.ContentSecurityPolicy.Tests;
+namespace Swallow.ContentSecurityPolicy.Tests.Directives;
 
 [InheritsTests]
 public sealed class ManifestSourceDirectiveTest : FetchDirectiveTestBase<ManifestSourceDirective>

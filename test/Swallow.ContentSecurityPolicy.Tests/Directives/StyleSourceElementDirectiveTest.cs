@@ -2,17 +2,17 @@ using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
 
-namespace Swallow.ContentSecurityPolicy.Tests;
+namespace Swallow.ContentSecurityPolicy.Tests.Directives;
 
 [InheritsTests]
-public sealed class DefaultSourceDirectiveTest : FetchDirectiveTestBase<DefaultSourceDirective>
+public sealed class StyleSourceElementDirectiveTest : FetchDirectiveTestBase<StyleSourceElementDirective>
 {
-    protected override string Name => "default-src";
+    protected override string Name => "style-src-elem";
 
-    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<DefaultSourceDirective> expression)
-        => policy.DefaultSource = [expression];
+    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<StyleSourceElementDirective> expression)
+        => policy.StyleSourceElement = [expression];
 
-    protected override IEnumerable<ITestCase<IAppliesTo<DefaultSourceDirective>>> EnumerateTestCases()
+    protected override IEnumerable<ITestCase<IAppliesTo<StyleSourceElementDirective>>> EnumerateTestCases()
     {
         yield return TestCases.For<DenyAll>();
         yield return TestCases.For<Hash>();
@@ -25,7 +25,6 @@ public sealed class DefaultSourceDirectiveTest : FetchDirectiveTestBase<DefaultS
         yield return TestCases.For<StrictDynamic>();
         yield return TestCases.For<TrustedTypesEval>();
         yield return TestCases.For<UnsafeEval>();
-        yield return TestCases.For<UnsafeHashes>();
         yield return TestCases.For<UnsafeInline>();
         yield return TestCases.For<WasmUnsafeEval>();
     }

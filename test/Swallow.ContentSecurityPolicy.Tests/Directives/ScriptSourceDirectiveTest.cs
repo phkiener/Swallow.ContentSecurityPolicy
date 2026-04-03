@@ -2,17 +2,17 @@ using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
 
-namespace Swallow.ContentSecurityPolicy.Tests;
+namespace Swallow.ContentSecurityPolicy.Tests.Directives;
 
 [InheritsTests]
-public sealed class ScriptSourceElementDirectiveTest : FetchDirectiveTestBase<ScriptSourceElementDirective>
+public sealed class ScriptSourceDirectiveTest : FetchDirectiveTestBase<ScriptSourceDirective>
 {
-    protected override string Name => "script-src-elem";
+    protected override string Name => "script-src";
 
-    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<ScriptSourceElementDirective> expression)
-        => policy.ScriptSourceElement = [expression];
+    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<ScriptSourceDirective> expression)
+        => policy.ScriptSource = [expression];
 
-    protected override IEnumerable<ITestCase<IAppliesTo<ScriptSourceElementDirective>>> EnumerateTestCases()
+    protected override IEnumerable<ITestCase<IAppliesTo<ScriptSourceDirective>>> EnumerateTestCases()
     {
         yield return TestCases.For<DenyAll>();
         yield return TestCases.For<Hash>();
@@ -25,6 +25,7 @@ public sealed class ScriptSourceElementDirectiveTest : FetchDirectiveTestBase<Sc
         yield return TestCases.For<StrictDynamic>();
         yield return TestCases.For<TrustedTypesEval>();
         yield return TestCases.For<UnsafeEval>();
+        yield return TestCases.For<UnsafeHashes>();
         yield return TestCases.For<UnsafeInline>();
         yield return TestCases.For<WasmUnsafeEval>();
     }

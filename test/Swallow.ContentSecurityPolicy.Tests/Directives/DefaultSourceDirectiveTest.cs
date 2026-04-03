@@ -2,17 +2,17 @@ using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
 
-namespace Swallow.ContentSecurityPolicy.Tests;
+namespace Swallow.ContentSecurityPolicy.Tests.Directives;
 
 [InheritsTests]
-public sealed class ScriptSourceDirectiveTest : FetchDirectiveTestBase<ScriptSourceDirective>
+public sealed class DefaultSourceDirectiveTest : FetchDirectiveTestBase<DefaultSourceDirective>
 {
-    protected override string Name => "script-src";
+    protected override string Name => "default-src";
 
-    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<ScriptSourceDirective> expression)
-        => policy.ScriptSource = [expression];
+    protected override void Apply(Abstractions.ContentSecurityPolicy policy, IAppliesTo<DefaultSourceDirective> expression)
+        => policy.DefaultSource = [expression];
 
-    protected override IEnumerable<ITestCase<IAppliesTo<ScriptSourceDirective>>> EnumerateTestCases()
+    protected override IEnumerable<ITestCase<IAppliesTo<DefaultSourceDirective>>> EnumerateTestCases()
     {
         yield return TestCases.For<DenyAll>();
         yield return TestCases.For<Hash>();
