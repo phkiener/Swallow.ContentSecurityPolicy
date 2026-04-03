@@ -9,7 +9,7 @@ internal sealed class ReportHandlerInvoker(ILogger<ReportHandlerInvoker> logger,
 {
     private readonly IReportHandler[] handlers = handlers.ToArray();
 
-    public async Task Invoke(HttpContext context)
+    private async Task Invoke(HttpContext context)
     {
         if (handlers is [])
         {
