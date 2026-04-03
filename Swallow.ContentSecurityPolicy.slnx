@@ -8,5 +8,10 @@
     <File Path="NuGet.config" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="src/Swallow.ContentSecurityPolicy/Swallow.ContentSecurityPolicy.csproj" />
+  <Folder Name="/Demo/">
+    <Project Path="demo/DemoHost/DemoHost.csproj" />
+  </Folder>
+  <Folder Name="/Library/">
+    <Project Path="src/Swallow.ContentSecurityPolicy/Swallow.ContentSecurityPolicy.csproj" />
+  </Folder>
 </Solution>
