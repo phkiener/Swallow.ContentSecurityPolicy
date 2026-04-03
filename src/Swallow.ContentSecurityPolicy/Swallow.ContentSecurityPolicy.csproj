@@ -7,5 +7,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Swallow.ContentSecurityPolicy.Abstractions\Swallow.ContentSecurityPolicy.Abstractions.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="Swallow.ContentSecurityPolicy.Tests" />
+  </ItemGroup>
 
 </Project>

@@ -27,5 +27,5 @@ public sealed class SchemeSource(string scheme) : SourceExpression,
     IAppliesTo<WorkerSourceDirective>
 {
     /// <inheritdoc />
-    public override string Value => $"{scheme}:";
+    public override string Value => scheme.EndsWith(":", StringComparison.OrdinalIgnoreCase) ? scheme : $"{scheme}:";
 }

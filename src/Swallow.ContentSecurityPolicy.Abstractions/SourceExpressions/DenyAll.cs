@@ -7,9 +7,10 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 /// resources.
 /// </summary>
 public sealed class DenyAll : SourceExpression,
-    IAppliesTo<DefaultSourceDirective>,
+    IAppliesTo<BaseUriDirective>,
     IAppliesTo<ChildSourceDirective>,
     IAppliesTo<ConnectSourceDirective>,
+    IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<FontSourceDirective>,
     IAppliesTo<FormActionDirective>,
     IAppliesTo<FrameAncestorsDirective>,

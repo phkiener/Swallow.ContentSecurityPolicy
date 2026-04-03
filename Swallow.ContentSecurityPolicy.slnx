@@ -16,4 +16,7 @@
     <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions/Swallow.ContentSecurityPolicy.Abstractions.csproj" />
     <Project Path="src/Swallow.ContentSecurityPolicy/Swallow.ContentSecurityPolicy.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="test/Swallow.ContentSecurityPolicy.Tests/Swallow.ContentSecurityPolicy.Tests.csproj" />
+  </Folder>
 </Solution>
