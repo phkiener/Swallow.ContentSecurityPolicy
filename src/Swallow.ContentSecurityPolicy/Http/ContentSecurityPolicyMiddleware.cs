@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swallow.ContentSecurityPolicy.Configuration;
 
@@ -27,7 +28,7 @@ public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPoli
         var defaultPolicy = options.Value.DefaultPolicy;
         if (defaultPolicy is not null)
         {
-            feature.Current = defaultPolicy;
+            feature.Policy = defaultPolicy;
         }
 
         return next(context);
@@ -40,8 +41,9 @@ public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPoli
             return Task.CompletedTask;
         }
 
+        var options = context.RequestServices.GetRequiredService<IOptions<ContentSecurityPolicyOptions>>();
         var feature = context.Features.Get<ContentSecurityPolicyFeature>();
-        feature?.SetHeader(context.Response.Headers);
+        feature?.SetHeader(context.Response.Headers, options.Value.ReportingEndpointName);
 
         return Task.CompletedTask;
     }

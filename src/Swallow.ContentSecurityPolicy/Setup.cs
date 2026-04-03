@@ -1,9 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Swallow.ContentSecurityPolicy.Configuration;
 using Swallow.ContentSecurityPolicy.Http;
 using Swallow.ContentSecurityPolicy.Internal;
+using Swallow.ContentSecurityPolicy.Reports;
 
 namespace Swallow.ContentSecurityPolicy;
 
@@ -26,6 +29,8 @@ public static class Setup
         Action<ContentSecurityPolicyOptions>? configure = null)
     {
         services.AddSingleton<ContentSecurityPolicyMarker>();
+        services.AddTransient(typeof(ReportHandlerInvoker));
+
         services.AddOptions<ContentSecurityPolicyOptions>();
         if (configure is not null)
         {
@@ -51,5 +56,22 @@ public static class Setup
             : app.UseMiddleware<ContentSecurityPolicyMiddleware>();
     }
 
-    private sealed record ContentSecurityPolicyMarker;
+    /// <summary>
+    /// Add an endpoint to handle CSP violation reports.
+    /// </summary>
+    /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the endpoint to.</param>
+    /// <param name="route">The URL to use for the endpoint.</param>
+    /// <returns>An <see cref="IEndpointConventionBuilder"/> to further configure the endpoint.</returns>
+    /// <remarks>
+    /// Use <see cref="ContentSecurityPolicyConfiguration.UseReportHandler{T}"/> to register an <see cref="IReportHandler"/> for this endpoint.
+    /// </remarks>
+    public static IEndpointConventionBuilder MapContentSecurityPolicyReports(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string route = "_csp/report")
+    {
+        return endpoints.MapPost(route, ReportHandlerInvoker.Delegate)
+            .AllowAnonymous()
+            .WithName(Abstractions.ContentSecurityPolicy.ReportingEndpointName)
+            .WithDisplayName("Content Security Policy Reports");
+    }
+
+    internal sealed record ContentSecurityPolicyMarker;
 }

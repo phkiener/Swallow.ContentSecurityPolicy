@@ -15,24 +15,30 @@ public sealed class ContentSecurityPolicyFeature(string nonce)
     /// <summary>
     /// The currently active policy, if any.
     /// </summary>
-    public Abstractions.ContentSecurityPolicy? Current { get; set; }
+    public Abstractions.ContentSecurityPolicy? Policy { get; set; }
 
     /// <summary>
     /// The nonce that will be used in expressions.
     /// </summary>
     public string Nonce { get; set; } = nonce;
 
-    internal void SetHeader(IHeaderDictionary headerDictionary)
+    internal void SetHeader(IHeaderDictionary headerDictionary, string reportingEndpointName)
     {
-        if (Current is null)
+        if (Policy is null)
         {
             return;
         }
 
-        var targetHeader = Current.ReportOnly ? HeaderNames.ContentSecurityPolicyReportOnly : HeaderNames.ContentSecurityPolicy;
-        var directives = Current.Directives.Select(AsHeaderValue);
+        var targetHeader = Policy.ReportOnly ? HeaderNames.ContentSecurityPolicyReportOnly : HeaderNames.ContentSecurityPolicy;
+        var directives = string.Join("; ", Policy.Directives.Select(AsHeaderValue));
 
-        headerDictionary[targetHeader] = string.Join("; ", directives);
+        if (Policy.ReportingEndpoint is not null)
+        {
+            headerDictionary.Append("Reporting-Endpoints", $"{reportingEndpointName}=\"{Policy.ReportingEndpoint}\"");
+            directives += $"; report-uri {Policy.ReportingEndpoint}; reporting-to={reportingEndpointName}";
+        }
+
+        headerDictionary[targetHeader] = directives;
     }
 
     private string AsHeaderValue(Directive directive)

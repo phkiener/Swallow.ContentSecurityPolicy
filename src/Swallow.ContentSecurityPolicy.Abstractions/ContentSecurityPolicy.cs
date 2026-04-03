@@ -6,6 +6,11 @@ namespace Swallow.ContentSecurityPolicy.Abstractions;
 /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#directives">CSP on MDN</seealso>
 public sealed partial class ContentSecurityPolicy
 {
+    /// <summary>
+    /// The endpoint name to use when registering an endpoint to handle CSP violation reports.
+    /// </summary>
+    public const string ReportingEndpointName = "csp-reporting-endpoint";
+
     private readonly Dictionary<string, Directive> directives = [];
 
     /// <summary>
@@ -20,16 +25,10 @@ public sealed partial class ContentSecurityPolicy
     public bool ReportOnly { get; set; } = false;
 
     /// <summary>
-    /// Add a <see cref="Directive"/> to the list of directives.
+    /// The endpoint to send CSP violation reports to.
     /// </summary>
-    /// <remarks>
-    /// If a directive with the same name already exists, it will be overwritten.
-    /// </remarks>
-    /// <param name="directive">The <see cref="Directive"/> to add.</param>
-    public void Add(Directive directive)
-    {
-        directives[directive.Name] = directive;
-    }
+    /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to">report-to on MDN</seealso>
+    public string? ReportingEndpoint { get; set; }
 
     private T? GetSpecific<T>(string key) where T : class
     {

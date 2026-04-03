@@ -1,3 +1,4 @@
+using DemoHost;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
@@ -8,12 +9,15 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
-var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()] };
-builder.Services.AddContentSecurityPolicy().SetDefaultPolicy(policy);
+builder.Services.AddContentSecurityPolicy()
+    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()] })
+    .UseReportHandler<ReportHandler>();
 
 var app = builder.Build();
 
 app.UseContentSecurityPolicy();
+app.MapContentSecurityPolicyReports(route: "_framework/csp/handle-report");
+
 app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
 app.MapGet("/deny-all", ctx =>
 {

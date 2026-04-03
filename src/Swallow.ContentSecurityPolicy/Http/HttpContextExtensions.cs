@@ -13,7 +13,7 @@ public static class HttpContextExtensions
         /// <summary>
         /// Return the current <see cref="Abstractions.ContentSecurityPolicy"/>.
         /// </summary>
-        public Abstractions.ContentSecurityPolicy? ContentSecurityPolicy => context.Features.Get<ContentSecurityPolicyFeature>()?.Current;
+        public Abstractions.ContentSecurityPolicy? ContentSecurityPolicy => context.Features.Get<ContentSecurityPolicyFeature>()?.Policy;
 
         /// <summary>
         /// Return the nonce that will be used for all <see cref="Nonce"/> expressions.
