@@ -4,7 +4,8 @@ public sealed class SchemeSource(string scheme) : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ChildSourceDirective>,
     IAppliesTo<ConnectSourceDirective>,
-    IAppliesTo<FontSourceDirective>
+    IAppliesTo<FontSourceDirective>,
+    IAppliesTo<FormActionDirective>
 {
     public string Scheme { get; } = scheme;
 

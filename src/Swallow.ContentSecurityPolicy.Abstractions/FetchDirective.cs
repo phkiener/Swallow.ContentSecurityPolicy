@@ -4,7 +4,7 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
 public abstract class FetchDirective(string name) : Directive, IEnumerable<ISourceExpression>
 {
-    private readonly HashSet<ISourceExpression> sourceExpressions = [];
+    private readonly List<ISourceExpression> sourceExpressions = [];
 
     public sealed override string Name { get; } = name;
     public sealed override IEnumerable<ISourceExpression> Expressions => EnumerateExpressions();

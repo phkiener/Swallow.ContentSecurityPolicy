@@ -4,7 +4,8 @@ public sealed class Self : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ChildSourceDirective>,
     IAppliesTo<ConnectSourceDirective>,
-    IAppliesTo<FontSourceDirective>
+    IAppliesTo<FontSourceDirective>,
+    IAppliesTo<FormActionDirective>
 {
     public static readonly Self Instance = new();
 
