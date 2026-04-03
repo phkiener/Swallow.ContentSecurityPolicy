@@ -1,32 +1,36 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Swallow.ContentSecurityPolicy.Configuration;
+using Swallow.ContentSecurityPolicy.Http;
 
 namespace Swallow.ContentSecurityPolicy;
 
 public static class Setup
 {
-    public static IServiceCollection AddContentSecurityPolicy(this IServiceCollection services, Action<ContentSecurityPolicyOptions>? configure = null)
+    private const string CspNotRegistered =
+        $"Content Security Policy is not registered; this can be fixed by calling builder.Services.{nameof(AddContentSecurityPolicy)}()";
+
+    public static ContentSecurityPolicyConfiguration AddContentSecurityPolicy(
+        this IServiceCollection services,
+        Action<ContentSecurityPolicyOptions>? configure = null)
     {
         services.AddSingleton<ContentSecurityPolicyMarker>();
         services.AddOptions<ContentSecurityPolicyOptions>();
+        services.AddTransient<ContentSecurityPolicyMiddleware>();
 
         if (configure is not null)
         {
             services.Configure(configure);
         }
 
-        return services.AddTransient<ContentSecurityPolicyMiddleware>();
+        return new ContentSecurityPolicyConfiguration(services);
     }
 
     public static IApplicationBuilder UseContentSecurityPolicy(this IApplicationBuilder app)
     {
-        if (app.ApplicationServices.GetService<ContentSecurityPolicyMarker>() is null)
-        {
-            throw new InvalidOperationException(
-                $"Content Security Policy is not registered; this can be fixed by calling builder.Services.{nameof(AddContentSecurityPolicy)}()");
-        }
-
-        return app.UseMiddleware<ContentSecurityPolicyMiddleware>();
+        return app.ApplicationServices.GetService<ContentSecurityPolicyMarker>() is null
+            ? throw new InvalidOperationException(CspNotRegistered)
+            : app.UseMiddleware<ContentSecurityPolicyMiddleware>();
     }
 
     private sealed record ContentSecurityPolicyMarker;

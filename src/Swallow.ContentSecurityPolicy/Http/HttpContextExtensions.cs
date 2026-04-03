@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Swallow.ContentSecurityPolicy;
+namespace Swallow.ContentSecurityPolicy.Http;
 
 public static class HttpContextExtensions
 {

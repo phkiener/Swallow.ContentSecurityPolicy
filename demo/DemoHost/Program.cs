@@ -1,16 +1,15 @@
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
-builder.Services.AddContentSecurityPolicy(opt => opt.DefaultPolicy = new ContentSecurityPolicy
-{
-    DefaultSource = [new Nonce("schnitzel")]
-});
+var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce("schnitzel")] };
+builder.Services.AddContentSecurityPolicy().SetDefaultPolicy(policy);
 
 var app = builder.Build();
 

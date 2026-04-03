@@ -1,6 +1,6 @@
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-namespace Swallow.ContentSecurityPolicy;
+namespace Swallow.ContentSecurityPolicy.Http;
 
 public sealed class ContentSecurityPolicyFeature
 {

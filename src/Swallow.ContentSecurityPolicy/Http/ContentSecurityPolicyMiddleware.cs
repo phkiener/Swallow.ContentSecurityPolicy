@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Swallow.ContentSecurityPolicy.Configuration;
 using Swallow.ContentSecurityPolicy.Internal;
 
-namespace Swallow.ContentSecurityPolicy;
+namespace Swallow.ContentSecurityPolicy.Http;
 
 public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPolicyOptions> options) : IMiddleware
 {

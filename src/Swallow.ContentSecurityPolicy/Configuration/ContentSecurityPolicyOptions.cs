@@ -1,4 +1,4 @@
-namespace Swallow.ContentSecurityPolicy;
+namespace Swallow.ContentSecurityPolicy.Configuration;
 
 public sealed class ContentSecurityPolicyOptions
 {
