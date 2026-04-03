@@ -1,6 +1,8 @@
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
+
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class WasmUnsafeEval : FetchSourceExpression
+public sealed class WasmUnsafeEval : SourceExpression, IAppliesTo<DefaultSourceDirective>
 {
     public static readonly WasmUnsafeEval Instance = new();
 

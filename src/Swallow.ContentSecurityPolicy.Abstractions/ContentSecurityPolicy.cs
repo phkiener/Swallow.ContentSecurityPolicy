@@ -10,13 +10,24 @@ public sealed class ContentSecurityPolicy
 
     public DefaultSourceDirective? DefaultSource
     {
-        get => directives.GetValueOrDefault(DefaultSourceDirective.Name) as DefaultSourceDirective;
+        get => GetSpecific<DefaultSourceDirective>(DefaultSourceDirective.Name);
         set => SetOrRemove(DefaultSourceDirective.Name, value);
+    }
+
+    public ChildSourceDirective? ChildSource
+    {
+        get => GetSpecific<ChildSourceDirective>(ChildSourceDirective.Name);
+        set => SetOrRemove(ChildSourceDirective.Name, value);
     }
 
     public void Add(Directive directive)
     {
         directives[directive.Name] = directive;
+    }
+
+    private T? GetSpecific<T>(string key) where T : class
+    {
+        return directives.GetValueOrDefault(key) as T;
     }
 
     private void SetOrRemove(string key, Directive? value)

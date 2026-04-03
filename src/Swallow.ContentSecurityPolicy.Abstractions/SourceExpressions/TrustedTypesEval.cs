@@ -1,6 +1,8 @@
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
+
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class TrustedTypesEval : FetchSourceExpression
+public sealed class TrustedTypesEval : SourceExpression, IAppliesTo<DefaultSourceDirective>
 {
     public static readonly TrustedTypesEval Instance = new();
 

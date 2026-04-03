@@ -2,11 +2,9 @@ using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class Self : SourceExpression,
+public sealed class HostSource(string hostString) : SourceExpression,
     IAppliesTo<DefaultSourceDirective>,
     IAppliesTo<ChildSourceDirective>
 {
-    public static readonly Self Instance = new();
-
-    public override string Value => "'self'";
+    public override string Value { get; } = hostString;
 }

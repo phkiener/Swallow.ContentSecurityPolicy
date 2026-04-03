@@ -1,6 +1,8 @@
+using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+
 namespace Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
-public sealed class ReportSample : FetchSourceExpression
+public sealed class ReportSample : SourceExpression, IAppliesTo<DefaultSourceDirective>
 {
     public static readonly ReportSample Instance = new();
 

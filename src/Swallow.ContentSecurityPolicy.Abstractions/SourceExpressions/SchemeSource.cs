@@ -1,6 +1,10 @@
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
+
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class SchemeSource(string scheme) : FetchSourceExpression
+public sealed class SchemeSource(string scheme) : SourceExpression,
+    IAppliesTo<DefaultSourceDirective>,
+    IAppliesTo<ChildSourceDirective>
 {
     public string Scheme { get; } = scheme;
 

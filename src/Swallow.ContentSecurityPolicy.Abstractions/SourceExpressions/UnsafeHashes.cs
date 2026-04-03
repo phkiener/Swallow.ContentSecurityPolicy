@@ -1,6 +1,8 @@
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
+
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class UnsafeHashes : FetchSourceExpression
+public sealed class UnsafeHashes : SourceExpression, IAppliesTo<DefaultSourceDirective>
 {
     public static readonly UnsafeHashes Instance = new();
 
