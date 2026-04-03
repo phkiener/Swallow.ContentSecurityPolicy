@@ -1,3 +1,6 @@
-namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 
-public abstract class FetchSourceExpression : SourceExpression;
+namespace Swallow.ContentSecurityPolicy.Abstractions;
+
+public abstract class FetchSourceExpression : SourceExpression, IAppliesTo<DefaultSourceDirective>;
