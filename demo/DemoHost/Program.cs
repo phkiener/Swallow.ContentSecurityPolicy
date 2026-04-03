@@ -10,7 +10,7 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
 builder.Services.AddContentSecurityPolicy()
-    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()] })
+    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()], ReportOnly = true })
     .UseReportHandler<ReportHandler>();
 
 var app = builder.Build();

@@ -10,7 +10,7 @@ public sealed class ContentSecurityPolicyOptions
     /// <summary>
     /// The default policy to apply.
     /// </summary>
-    public Abstractions.ContentSecurityPolicy? DefaultPolicy { get; set; }
+    public Abstractions.ContentSecurityPolicy? Policy { get; set; }
 
     /// <summary>
     /// Get the <em>endpoint name</em> to use when reporting is enabled.

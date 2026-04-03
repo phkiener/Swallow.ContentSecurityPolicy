@@ -35,7 +35,7 @@ public sealed class ContentSecurityPolicyFeature(string nonce)
         if (Policy.ReportingEndpoint is not null)
         {
             headerDictionary.Append("Reporting-Endpoints", $"{reportingEndpointName}=\"{Policy.ReportingEndpoint}\"");
-            directives += $"; report-uri {Policy.ReportingEndpoint}; reporting-to={reportingEndpointName}";
+            directives += $"; report-to={reportingEndpointName}";
         }
 
         headerDictionary[targetHeader] = directives;

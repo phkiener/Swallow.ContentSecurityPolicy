@@ -47,6 +47,65 @@ app.MapGet("/deny-all", ctx =>
 });
 ```
 
-### Reporting endpoints
+### Reporting violations
 
-... to be done!
+To not actually block any resources, but only send reports for resources that
+*would* be blocked, you can set `ReportOnly` on the `ContentSecurityPolicy`.
+
+```csharp
+builder.Services.AddContentSecurityPolicy()
+    .SetPolicy(new ContentSecurityPolicy
+    {
+        DefaultSource = [new Nonce()],
+        StyleSource = [new Nonce()],
+        ReportOnly = true // <- this one!
+    })
+```
+
+This only makes sense when actually setting a reporting endpoint.
+
+```csharp
+builder.Services.AddContentSecurityPolicy()
+    .SetPolicy(new ContentSecurityPolicy
+    {
+        DefaultSource = [new Nonce()],
+        StyleSource = [new Nonce()],
+        ReportOnly = true,
+        ReportingEndpoint = "/report-csp" // <- this one!
+    })
+```
+
+### Handling violation reports
+
+You can also specify a handler to process any violation reports:
+
+```csharp
+builder.Services.AddContentSecurityPolicy()
+    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()], ReportOnly = true })
+    .UseReportHandler<ReportHandler>(); // <- this one!
+```
+
+Note that you don't have to specify the `ReportingEndpoint`; it will be resolved automatically,
+provided you register a matching endpoint:
+
+```csharp
+// Handles reports on _csp/report by default
+app.MapContentSecurityPolicyReports();
+
+// You can also pass in a custom route if you want:
+app.MapContentSecurityPolicyReports(route: "_reports/csp/violation");
+```
+
+The report handler itself can be fairly simple:
+
+```csharp
+public sealed class ReportHandler(ILogger<ReportHandler> logger) : IReportHandler
+{
+    public Task Handle(CSPViolationReport violationReport, CancellationToken cancellationToken)
+    {
+        logger.LogWarning("CSP Violation {Report}", violationReport);
+
+        return Task.CompletedTask;
+    }
+}
+```

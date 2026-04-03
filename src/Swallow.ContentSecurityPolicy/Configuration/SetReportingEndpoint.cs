@@ -8,7 +8,7 @@ internal sealed class SetReportingEndpoint(LinkGenerator linkGenerator, IHttpCon
 {
     public void Configure(ContentSecurityPolicyOptions options)
     {
-        options.DefaultPolicy?.ReportingEndpoint ??= httpContextAccessor.HttpContext is null
+        options.Policy?.ReportingEndpoint ??= httpContextAccessor.HttpContext is null
             ? linkGenerator.GetPathByName(Abstractions.ContentSecurityPolicy.ReportingEndpointName)
             : linkGenerator.GetPathByName(httpContextAccessor.HttpContext, Abstractions.ContentSecurityPolicy.ReportingEndpointName);
     }

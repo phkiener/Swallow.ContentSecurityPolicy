@@ -25,7 +25,7 @@ public sealed class ContentSecurityPolicyMiddleware(IOptions<ContentSecurityPoli
         var feature = new ContentSecurityPolicyFeature(nonceGenerator.Generate());
         context.Features.Set(feature);
 
-        var defaultPolicy = options.Value.DefaultPolicy;
+        var defaultPolicy = options.Value.Policy;
         if (defaultPolicy is not null)
         {
             feature.Policy = defaultPolicy;

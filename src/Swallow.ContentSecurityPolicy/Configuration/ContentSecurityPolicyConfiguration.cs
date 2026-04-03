@@ -23,9 +23,10 @@ public sealed class ContentSecurityPolicyConfiguration
     /// Set the initial policy for the <see cref="ContentSecurityPolicyFeature"/>.
     /// </summary>
     /// <param name="policy">The policy to apply.</param>
+    /// <seealso cref="ContentSecurityPolicyOptions.Policy"/>
     public ContentSecurityPolicyConfiguration SetPolicy(Abstractions.ContentSecurityPolicy policy)
     {
-        serviceCollection.Configure<ContentSecurityPolicyOptions>(opt => opt.DefaultPolicy = policy);
+        serviceCollection.Configure<ContentSecurityPolicyOptions>(opt => opt.Policy = policy);
         return this;
     }
 
@@ -40,6 +41,17 @@ public sealed class ContentSecurityPolicyConfiguration
         serviceCollection.TryAddScoped<IReportHandler, THandler>();
         serviceCollection.AddSingleton<IConfigureOptions<ContentSecurityPolicyOptions>, SetReportingEndpoint>();
 
+        return this;
+    }
+
+    /// <summary>
+    /// Set the name for the reporting endpoint.
+    /// </summary>
+    /// <param name="name">The name for the reporting endpoint.</param>
+    /// <seealso cref="ContentSecurityPolicyOptions.ReportingEndpointName"/>
+    public ContentSecurityPolicyConfiguration SetReportingEndpointName(string name)
+    {
+        serviceCollection.Configure<ContentSecurityPolicyOptions>(opt => opt.ReportingEndpointName = name);
         return this;
     }
 }
