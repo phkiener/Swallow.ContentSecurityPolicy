@@ -1,6 +1,7 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class Hash(Hash.Algorithm algorithm, string hashedValue) : SourceExpression, IAppliesTo<DefaultSourceDirective>
+public sealed class Hash(Hash.Algorithm algorithm, string hashedValue) : SourceExpression,
+    IAppliesTo<DefaultSourceDirective>
 {
     public Hash(Algorithm algorithm, byte[] hash) : this(algorithm, Convert.ToBase64String(hash)) { }
 

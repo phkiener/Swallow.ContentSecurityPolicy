@@ -1,6 +1,7 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class StrictDynamic : SourceExpression, IAppliesTo<DefaultSourceDirective>
+public sealed class StrictDynamic : SourceExpression,
+    IAppliesTo<DefaultSourceDirective>
 {
     public static readonly StrictDynamic Instance = new();
 

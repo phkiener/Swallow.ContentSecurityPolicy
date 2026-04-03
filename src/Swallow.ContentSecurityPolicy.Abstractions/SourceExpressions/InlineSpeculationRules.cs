@@ -1,6 +1,7 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class InlineSpeculationRules : SourceExpression, IAppliesTo<DefaultSourceDirective>
+public sealed class InlineSpeculationRules : SourceExpression,
+    IAppliesTo<DefaultSourceDirective>
 {
     public static readonly InlineSpeculationRules Instance = new();
 

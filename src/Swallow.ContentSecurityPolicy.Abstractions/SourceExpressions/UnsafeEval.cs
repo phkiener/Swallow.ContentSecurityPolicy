@@ -1,6 +1,7 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Directives;
 
-public sealed class UnsafeEval : SourceExpression, IAppliesTo<DefaultSourceDirective>
+public sealed class UnsafeEval : SourceExpression,
+    IAppliesTo<DefaultSourceDirective>
 {
     public static readonly UnsafeEval Instance = new();
 

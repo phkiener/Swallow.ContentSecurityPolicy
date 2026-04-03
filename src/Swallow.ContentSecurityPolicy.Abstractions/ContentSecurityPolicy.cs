@@ -20,6 +20,12 @@ public sealed class ContentSecurityPolicy
         set => SetOrRemove(ChildSourceDirective.Name, value);
     }
 
+    public ConnectSourceDirective? ConnectSource
+    {
+        get => GetSpecific<ConnectSourceDirective>(ConnectSourceDirective.Name);
+        set => SetOrRemove(ConnectSourceDirective.Name, value);
+    }
+
     public void Add(Directive directive)
     {
         directives[directive.Name] = directive;
