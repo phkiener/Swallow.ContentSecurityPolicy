@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;
@@ -8,12 +9,13 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
     .AddFilter("Swallow.ContentSecurityPolicy", LogLevel.Trace);
 
-var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce("schnitzel")] };
+var policy = new ContentSecurityPolicy { DefaultSource = [new Nonce("schnitzel")], StyleSource = [new Nonce("pommes")] };
 builder.Services.AddContentSecurityPolicy().SetDefaultPolicy(policy);
 
+var options = new JsonSerializerOptions { WriteIndented = true };
 var app = builder.Build();
 
 app.UseContentSecurityPolicy();
-app.MapGet("/", static ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.ContentSecurityPolicy?.Nonce}'"));
+app.MapGet("/", ctx => Results.Json(ctx.ContentSecurityPolicy, options: options).ExecuteAsync(ctx));
 
 app.Run();
