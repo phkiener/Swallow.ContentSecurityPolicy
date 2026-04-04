@@ -23,15 +23,22 @@ public static class ViolationReportHandler
 
         public async Task InvokeAsync(HttpContext context, CancellationToken cancellationToken)
         {
+            context.Response.StatusCode = StatusCodes.Status200OK;
+
             if (reportHandlers is [])
             {
                 logger.LogWarning("CSP violations are being handled, but no {Type} is registered.", nameof(IReportHandler));
-
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
             }
 
-            if (context.Request.ContentType is "application/reports+json")
+            if (context.Request.ContentType is not "application/reports+json")
+            {
+                context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+                context.Response.Headers.Accept = "application/reports+json";
+                return;
+            }
+
+            try
             {
                 var jsonElement = await context.Request.ReadFromJsonAsync<JsonElement>(context.RequestAborted);
                 var violations = jsonElement.ValueKind is JsonValueKind.Array
@@ -49,12 +56,15 @@ public static class ViolationReportHandler
                         catch (Exception e)
                         {
                             logger.LogError(e, "Unhandled exception in CSP report handler");
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         }
                     }
                 }
             }
-
-            context.Response.StatusCode = StatusCodes.Status200OK;
+            catch (JsonException)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            }
         }
     }
 
