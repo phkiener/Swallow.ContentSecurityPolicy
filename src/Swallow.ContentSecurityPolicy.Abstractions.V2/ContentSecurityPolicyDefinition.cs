@@ -32,6 +32,11 @@ public sealed class ContentSecurityPolicyDefinition(IEnumerable<Directive> direc
     public ChildSourceDirective? ChildSource => GetDirective<ChildSourceDirective>();
 
     /// <summary>
+    /// The configured <see cref="ChildSourceDirective"/> or <see langword="null"/> if none exists.
+    /// </summary>
+    public ConnectSourceDirective? ConnectSource => GetDirective<ConnectSourceDirective>();
+
+    /// <summary>
     /// The configured <see cref="DefaultSourceDirective"/> or <see langword="null"/> if none exists.
     /// </summary>
     public DefaultSourceDirective? DefaultSource => GetDirective<DefaultSourceDirective>();

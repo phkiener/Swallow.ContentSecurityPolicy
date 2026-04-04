@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Swallow.ContentSecurityPolicy.Abstractions;
 using Swallow.ContentSecurityPolicy.Abstractions.Directives;

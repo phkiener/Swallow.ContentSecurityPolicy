@@ -25,6 +25,15 @@ public partial class ContentSecurityPolicyBuilder
     }
 
     /// <summary>
+    /// The configured <see cref="ConnectSourceDirective"/> or <see langword="null"/> if none exists.
+    /// </summary>
+    public ConnectSourceDirective? ConnectSource
+    {
+        get => GetDirective<ConnectSourceDirective>();
+        set => SetDirective(value);
+    }
+
+    /// <summary>
     /// The configured <see cref="DefaultSourceDirective"/> or <see langword="null"/> if none exists.
     /// </summary>
     public DefaultSourceDirective? DefaultSource

@@ -7,10 +7,9 @@ namespace Swallow.ContentSecurityPolicy.V2.Tests.Abstractions.Model;
 public sealed class FetchDirectiveTest
 {
     [Test]
-    public async Task ExpressionsApplyToDirectives()
+    public async Task DirectivesWithAllExpressions()
     {
-        // -- Group 1: All the expressions.
-        var allTypes = new List<Type>
+        var expectedTypes = new List<Type>
         {
             typeof(DenyAll),
             typeof(Hash),
@@ -28,14 +27,18 @@ public sealed class FetchDirectiveTest
             typeof(WasmUnsafeEval)
         };
 
-        await AssertSourceExpressions<DefaultSourceDirective>(allTypes);
-        await AssertSourceExpressions<ScriptSourceDirective>(allTypes);
-        await AssertSourceExpressions<StyleSourceDirective>(allTypes);
-        await AssertSourceExpressions<ScriptSourceElementDirective>(allTypes.Except([typeof(UnsafeHashes)]));
-        await AssertSourceExpressions<StyleSourceElementDirective>(allTypes.Except([typeof(UnsafeHashes)]));
+        await AssertSourceExpressions<DefaultSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ScriptSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<StyleSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ScriptSourceElementDirective>(expectedTypes.Except([typeof(UnsafeHashes)]));
+        await AssertSourceExpressions<StyleSourceElementDirective>(expectedTypes.Except([typeof(UnsafeHashes)]));
 
-        // -- Group 2: Only URL-based expressions
-        var usualTypes = new List<Type>
+    }
+
+    [Test]
+    public async Task DirectivesWithUrlExpressions()
+    {
+        var expectedTypes = new List<Type>
         {
             typeof(DenyAll),
             typeof(HostSource),
@@ -43,21 +46,24 @@ public sealed class FetchDirectiveTest
             typeof(Self)
         };
 
-        await AssertSourceExpressions<BaseUriDirective>(usualTypes);
-        await AssertSourceExpressions<ChildSourceDirective>(usualTypes);
-        await AssertSourceExpressions<ConnectSourceDirective>(usualTypes);
-        await AssertSourceExpressions<FontSourceDirective>(usualTypes);
-        await AssertSourceExpressions<FormActionDirective>(usualTypes);
-        await AssertSourceExpressions<FrameAncestorsDirective>(usualTypes);
-        await AssertSourceExpressions<FrameSourceDirective>(usualTypes);
-        await AssertSourceExpressions<ImageSourceDirective>(usualTypes);
-        await AssertSourceExpressions<ManifestSourceDirective>(usualTypes);
-        await AssertSourceExpressions<MediaSourceDirective>(usualTypes);
-        await AssertSourceExpressions<ObjectSourceDirective>(usualTypes);
-        await AssertSourceExpressions<WorkerSourceDirective>(usualTypes);
+        await AssertSourceExpressions<BaseUriDirective>(expectedTypes);
+        await AssertSourceExpressions<ChildSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ConnectSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<FontSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<FormActionDirective>(expectedTypes);
+        await AssertSourceExpressions<FrameAncestorsDirective>(expectedTypes);
+        await AssertSourceExpressions<FrameSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ImageSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ManifestSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<MediaSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<ObjectSourceDirective>(expectedTypes);
+        await AssertSourceExpressions<WorkerSourceDirective>(expectedTypes);
+    }
 
-        // -- Group 3: Only inline-based expressions
-        var attributeTypes = new List<Type>
+    [Test]
+    public async Task DirectivesWithInlineExpressions()
+    {
+        var expectedTypes = new List<Type>
         {
             typeof(DenyAll),
             typeof(UnsafeHashes),
@@ -65,8 +71,8 @@ public sealed class FetchDirectiveTest
             typeof(ReportSample)
         };
 
-        await AssertSourceExpressions<ScriptSourceAttributeDirective>(attributeTypes);
-        await AssertSourceExpressions<StyleSourceAttributeDirective>(attributeTypes);
+        await AssertSourceExpressions<ScriptSourceAttributeDirective>(expectedTypes);
+        await AssertSourceExpressions<StyleSourceAttributeDirective>(expectedTypes);
     }
 
     private static async Task AssertSourceExpressions<T>(params IEnumerable<Type> expectedTypes) where T : FetchDirective<T>
