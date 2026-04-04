@@ -1,0 +1,45 @@
+using System.Collections;
+
+namespace Swallow.ContentSecurityPolicy.Abstractions.V2.Model;
+
+/// <summary>
+/// A specific kind of directive that controls which resources may be <em>fetched</em> (or executed).
+/// </summary>
+/// <typeparam name="T">The deriving type; this is the "curiously recurring template pattern" (CRTP).</typeparam>
+public abstract class FetchDirective<T> : Directive, IEnumerable<ISourceExpression<T>>
+    where T : FetchDirective<T>
+{
+    private readonly List<ISourceExpression<T>> sourceExpressions = [];
+
+    /// <summary>
+    /// Enumerate the configured <see cref="ISourceExpression{T}"/>s.
+    /// </summary>
+    public IEnumerable<ISourceExpression<T>> Expressions => sourceExpressions.AsEnumerable();
+
+    /// <summary>
+    /// Add an expression to this directive.
+    /// </summary>
+    /// <param name="expression">The <see cref="ISourceExpression{T}"/> to add.</param>
+    public void Add(ISourceExpression<T> expression)
+    {
+        sourceExpressions.Add(expression);
+    }
+
+    /// <summary>
+    /// Add multiple expressions to this directive.
+    /// </summary>
+    /// <param name="source">The <see cref="ISourceExpression{T}"/>s to add.</param>
+    public void AddRange(params IEnumerable<ISourceExpression<T>> source)
+    {
+        foreach (var sourceExpression in source)
+        {
+            Add(sourceExpression);
+        }
+    }
+
+    /// <inheritdoc />
+    IEnumerator<ISourceExpression<T>> IEnumerable<ISourceExpression<T>>.GetEnumerator() => sourceExpressions.GetEnumerator();
+
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator() => sourceExpressions.GetEnumerator();
+}

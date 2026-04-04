@@ -6,6 +6,11 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
 /// Set the containing <see cref="Directive"/> to <c>'none'</c>, denying all
 /// resources.
 /// </summary>
+/// <remarks>
+/// This should be called <c>None</c>, but that's just way too similar to
+/// <see cref="Nonce"/>. To prevent any unfortunate typos, this one has a
+/// different name.
+/// </remarks>
 public sealed class DenyAll : SourceExpression,
     IAppliesTo<BaseUriDirective>,
     IAppliesTo<ChildSourceDirective>,

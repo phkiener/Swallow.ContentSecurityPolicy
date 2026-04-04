@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <ItemGroup>
+    <Compile Update="ContentSecurityPolicyBuilder.*.cs" DependentUpon="ContentSecurityPolicyBuilder.cs" />
+  </ItemGroup>
+  
+</Project>

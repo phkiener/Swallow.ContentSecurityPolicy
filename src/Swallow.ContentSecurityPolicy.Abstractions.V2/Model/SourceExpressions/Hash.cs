@@ -1,19 +1,19 @@
-using Swallow.ContentSecurityPolicy.Abstractions.Directives;
+using Swallow.ContentSecurityPolicy.Abstractions.V2.Model.Directives;
 
-namespace Swallow.ContentSecurityPolicy.Abstractions.SourceExpressions;
+namespace Swallow.ContentSecurityPolicy.Abstractions.V2.Model.SourceExpressions;
 
 /// <summary>
 /// Set the containing <see cref="Directive"/> to allow resources with the given hash.
 /// </summary>
 /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#hash_algorithm-hash_value">hash on MDN</seealso>
-/// <param name="algorithm">The <see cref="Algorithm"/> used.</param>
-/// <param name="hashedValue">The base64-encoded hash.</param>
-public sealed class Hash(Hash.Algorithm algorithm, string hashedValue) : SourceExpression,
-    IAppliesTo<DefaultSourceDirective>,
-    IAppliesTo<ScriptSourceDirective>,
-    IAppliesTo<ScriptSourceElementDirective>,
-    IAppliesTo<StyleSourceDirective>,
-    IAppliesTo<StyleSourceElementDirective>
+/// <param name="HashAlgorithm">The <see cref="Algorithm"/> that was used.</param>
+/// <param name="HashedValue">The base64-encoded hash.</param>
+public sealed record Hash(Hash.Algorithm HashAlgorithm, string HashedValue) :
+    ISourceExpression<DefaultSourceDirective>,
+    ISourceExpression<ScriptSourceDirective>,
+    ISourceExpression<ScriptSourceElementDirective>,
+    ISourceExpression<StyleSourceDirective>,
+    ISourceExpression<StyleSourceElementDirective>
 {
     /// <summary>
     /// Set the containing <see cref="Directive"/> to allow resources with the given hash.
@@ -41,19 +41,5 @@ public sealed class Hash(Hash.Algorithm algorithm, string hashedValue) : SourceE
         /// SHA512
         /// </summary>
         SHA512
-    }
-
-    /// <inheritdoc />
-    public override string Value => $"'{EncodeAlgorithm(algorithm)}-{hashedValue}'";
-
-    private static string EncodeAlgorithm(Algorithm algorithm)
-    {
-        return algorithm switch
-        {
-            Algorithm.SHA256 => "sha256",
-            Algorithm.SHA384 => "sha384",
-            Algorithm.SHA512 => "sha512",
-            _ => throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null)
-        };
     }
 }

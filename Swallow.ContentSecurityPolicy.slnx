@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/Library/">
     <File Path="src\Directory.Build.props" />
+    <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions.V2/Swallow.ContentSecurityPolicy.Abstractions.V2.csproj" />
     <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions/Swallow.ContentSecurityPolicy.Abstractions.csproj" />
     <Project Path="src/Swallow.ContentSecurityPolicy/Swallow.ContentSecurityPolicy.csproj" />
   </Folder>

@@ -16,7 +16,7 @@ internal sealed class ReportHandlerInvoker(ILogger<ReportHandlerInvoker> logger,
             logger.LogError("CSP violation report handling was specified but no {Interface} was registered.", nameof(IReportHandler));
 
             context.Response.StatusCode = StatusCodes.Status404NotFound;
-            return ;
+            return;
         }
 
         if (context.Request.ContentType is "application/reports+json")

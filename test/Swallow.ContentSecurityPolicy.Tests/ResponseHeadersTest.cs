@@ -160,7 +160,7 @@ public sealed class ResponseHeadersTest
     [Test]
     public async Task WithEndpointModifyingPolicy_UsesUpdatedPolicyInHeaders()
     {
-        var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
+        var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [DenyAll.Instance] };
 
         await using var host = TestableHost.Start(s => s.AddContentSecurityPolicy().SetPolicy(policy));
 

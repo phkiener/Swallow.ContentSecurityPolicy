@@ -1,13 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace Swallow.ContentSecurityPolicy.Reports;
+namespace Swallow.ContentSecurityPolicy.Abstractions.V2.Reports;
 
 /// <summary>
-/// A CSP violation report sent by the browser.
+/// A content security policy violation report sent by the browser.
 /// </summary>
 /// <seealso href="https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport">CSPViolationReport on MDN</seealso>
-public sealed class CSPViolationReport
+public sealed class ViolationReport
 {
     /// <summary>
     /// The body of the report.
@@ -125,6 +125,6 @@ public sealed class CSPViolationReport
 
 [ExcludeFromCodeCoverage]
 [JsonSourceGenerationOptions]
-[JsonSerializable(typeof(CSPViolationReport))]
-[JsonSerializable(typeof(CSPViolationReport[]))]
-internal partial class CspViolationReportSourceGenerationContext : JsonSerializerContext;
+[JsonSerializable(typeof(ViolationReport))]
+[JsonSerializable(typeof(ViolationReport[]))]
+internal partial class ViolationReportSourceGenerationContext : JsonSerializerContext;
