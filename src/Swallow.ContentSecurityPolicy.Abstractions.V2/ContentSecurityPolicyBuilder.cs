@@ -8,6 +8,7 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.V2;
 public sealed partial class ContentSecurityPolicyBuilder
 {
     private readonly List<Directive> directives = [];
+    private bool reportOnly = false;
 
     /// <summary>
     /// Add the given directive to the <see cref="ContentSecurityPolicyDefinition"/>.
@@ -24,12 +25,22 @@ public sealed partial class ContentSecurityPolicyBuilder
     }
 
     /// <summary>
+    /// Set the <see cref="ContentSecurityPolicyDefinition"/> to only report violations instead of enforcing them.
+    /// </summary>
+    /// <param name="enabled">Whether to only report violations (when <see langword="true"/>) or actually enforce them (when <see langword="false"/>).</param>
+    public ContentSecurityPolicyBuilder ReportOnly(bool enabled = true)
+    {
+        reportOnly = enabled;
+        return this;
+    }
+
+    /// <summary>
     /// Build the final <see cref="ContentSecurityPolicyDefinition"/>.
     /// </summary>
     /// <returns>The resulting <see cref="ContentSecurityPolicyDefinition"/>.</returns>
     public ContentSecurityPolicyDefinition Build()
     {
-        return new ContentSecurityPolicyDefinition(directives);
+        return new ContentSecurityPolicyDefinition(directives, reportOnly);
     }
 
     private T? GetDirective<T>() where T : Directive
