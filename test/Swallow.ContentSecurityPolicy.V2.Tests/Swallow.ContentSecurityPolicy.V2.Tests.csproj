@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Swallow.ContentSecurityPolicy.Abstractions\Swallow.ContentSecurityPolicy.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\Swallow.ContentSecurityPolicy\Swallow.ContentSecurityPolicy.csproj" />
-    <ProjectReference Include="..\TestHost\TestHost.csproj" />
+    <ProjectReference Include="../../src/Swallow.ContentSecurityPolicy.Abstractions.V2/Swallow.ContentSecurityPolicy.Abstractions.V2.csproj" />
+    <ProjectReference Include="../../src/Swallow.ContentSecurityPolicy.V2/Swallow.ContentSecurityPolicy.V2.csproj" />
+    <ProjectReference Include="../TestHost/TestHost.csproj" />
   </ItemGroup>
 
 </Project>
