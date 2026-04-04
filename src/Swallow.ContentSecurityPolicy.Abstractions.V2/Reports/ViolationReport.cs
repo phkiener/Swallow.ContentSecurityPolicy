@@ -123,8 +123,11 @@ public sealed class ViolationReport
     }
 }
 
+/// <summary>
+/// The generated <see cref="JsonSerializerContext"/> to (de-)serialize a <see cref="ViolationReport"/>.
+/// </summary>
 [ExcludeFromCodeCoverage]
 [JsonSourceGenerationOptions]
 [JsonSerializable(typeof(ViolationReport))]
 [JsonSerializable(typeof(ViolationReport[]))]
-internal partial class ViolationReportSourceGenerationContext : JsonSerializerContext;
+public partial class ViolationReportSourceGenerationContext : JsonSerializerContext;

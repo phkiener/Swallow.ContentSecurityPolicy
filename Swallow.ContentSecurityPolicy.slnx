@@ -15,6 +15,7 @@
     <File Path="src\Directory.Build.props" />
     <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions.V2/Swallow.ContentSecurityPolicy.Abstractions.V2.csproj" />
     <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions/Swallow.ContentSecurityPolicy.Abstractions.csproj" />
+    <Project Path="src/Swallow.ContentSecurityPolicy.V2/Swallow.ContentSecurityPolicy.V2.csproj" />
     <Project Path="src/Swallow.ContentSecurityPolicy/Swallow.ContentSecurityPolicy.csproj" />
   </Folder>
   <Folder Name="/Tests/">

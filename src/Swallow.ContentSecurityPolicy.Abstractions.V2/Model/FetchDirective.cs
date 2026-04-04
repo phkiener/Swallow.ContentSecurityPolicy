@@ -5,8 +5,19 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.V2.Model;
 /// <summary>
 /// A specific kind of directive that controls which resources may be <em>fetched</em> (or executed).
 /// </summary>
+public interface IFetchDirective
+{
+    /// <summary>
+    /// Enumerate the configured <see cref="ISourceExpression"/>s.
+    /// </summary>
+    public IEnumerable<ISourceExpression> Expressions { get; }
+}
+
+/// <summary>
+/// A specific kind of directive that controls which resources may be <em>fetched</em> (or executed).
+/// </summary>
 /// <typeparam name="T">The deriving type; this is the "curiously recurring template pattern" (CRTP).</typeparam>
-public abstract class FetchDirective<T> : Directive, IEnumerable<ISourceExpression<T>>
+public abstract class FetchDirective<T> : Directive, IFetchDirective, IEnumerable<ISourceExpression<T>>
     where T : FetchDirective<T>
 {
     private readonly List<ISourceExpression<T>> sourceExpressions = [];
@@ -15,6 +26,9 @@ public abstract class FetchDirective<T> : Directive, IEnumerable<ISourceExpressi
     /// Enumerate the configured <see cref="ISourceExpression{T}"/>s.
     /// </summary>
     public IEnumerable<ISourceExpression<T>> Expressions => sourceExpressions.AsEnumerable();
+
+    /// <inheritdoc />
+    IEnumerable<ISourceExpression> IFetchDirective.Expressions => sourceExpressions.AsEnumerable();
 
     /// <summary>
     /// Add an expression to this directive.
