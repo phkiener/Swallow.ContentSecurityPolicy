@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using Swallow.ContentSecurityPolicy.Reports;
 using Swallow.ContentSecurityPolicy.Tests.Framework;
@@ -7,6 +8,36 @@ namespace Swallow.ContentSecurityPolicy.Tests;
 public sealed class ReportingEndpointTest
 {
     private static readonly Abstractions.ContentSecurityPolicy DenyAll = new() { DefaultSource = [] };
+
+    [Test]
+    public async Task ReturnsNotFound_WhenNoHandlersAreRegistered()
+    {
+        await using var host = TestableHost.Start(s => s.AddContentSecurityPolicy().SetPolicy(DenyAll));
+
+        var report = new CSPViolationReport
+        {
+            Body = new CSPViolationReport.ReportBody
+            {
+                BlockedUrl = "https://localhost:81/hacked.js",
+                ColumnNumber = null,
+                Disposition = CSPViolationReport.Disposition.Enforce,
+                DocumentUrl = "https://localhost:80/",
+                EffectiveDirective = "default-src",
+                LineNumber = null,
+                OriginalPolicy = "default-src 'none'",
+                Referrer = null,
+                Sample = "",
+                SourceFile = null,
+                StatusCode = 200
+            },
+            Url = "https://localhost:80/"
+        };
+
+        using var client = host.CreateClient();
+        var response = await client.PostAsync("/_csp/report", JsonContent.Create(report, mediaType: new MediaTypeHeaderValue("application/reports+json")));
+
+        await Assert.That(response).HasStatusCode(HttpStatusCode.NotFound);
+    }
 
     [Test]
     public async Task ReportingEndpoint_HandlesSingleViolation()

@@ -126,6 +126,21 @@ public sealed class ResponseHeadersTest
     }
 
     [Test]
+    public async Task WithNonce_NonceInHeaderMatches()
+    {
+        var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
+
+        await using var host = TestableHost.Start(s => s.AddContentSecurityPolicy().SetPolicy(policy));
+
+        using var client = host.CreateClient();
+        using var response = await client.GetAsync("/nonce");
+
+        var nonce = await response.Content.ReadAsStringAsync();
+        var contentSecurityPolicyHeader = response.Headers.GetValues(HeaderNames.ContentSecurityPolicy).FirstOrDefault();
+        await Assert.That(contentSecurityPolicyHeader).IsEqualTo($"default-src 'nonce-{nonce}'");
+    }
+
+    [Test]
     public async Task WithCustomNonceGenerator_UsesGeneratedNonce()
     {
         var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
@@ -140,6 +155,20 @@ public sealed class ResponseHeadersTest
 
         var contentSecurityPolicyHeader = response.Headers.GetValues(HeaderNames.ContentSecurityPolicy).FirstOrDefault();
         await Assert.That(contentSecurityPolicyHeader).IsEqualTo($"default-src 'nonce-{Assertion.TestNonce}'");
+    }
+
+    [Test]
+    public async Task WithEndpointModifyingPolicy_UsesUpdatedPolicyInHeaders()
+    {
+        var policy = new Abstractions.ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
+
+        await using var host = TestableHost.Start(s => s.AddContentSecurityPolicy().SetPolicy(policy));
+
+        using var client = host.CreateClient();
+        using var response = await client.GetAsync("/unsafe-inline");
+
+        var contentSecurityPolicyHeader = response.Headers.GetValues(HeaderNames.ContentSecurityPolicy).FirstOrDefault();
+        await Assert.That(contentSecurityPolicyHeader).IsEqualTo($"default-src 'unsafe-inline'");
     }
 
     private sealed class MockReportHandler : IReportHandler
