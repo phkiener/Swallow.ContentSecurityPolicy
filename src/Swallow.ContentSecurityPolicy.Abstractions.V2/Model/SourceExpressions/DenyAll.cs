@@ -25,7 +25,9 @@ public sealed record DenyAll :
     ISourceExpression<MediaSourceDirective>,
     ISourceExpression<ObjectSourceDirective>,
     ISourceExpression<ScriptSourceDirective>,
+    ISourceExpression<ScriptSourceAttributeDirective>,
     ISourceExpression<ScriptSourceElementDirective>,
     ISourceExpression<StyleSourceDirective>,
+    ISourceExpression<StyleSourceAttributeDirective>,
     ISourceExpression<StyleSourceElementDirective>,
     ISourceExpression<WorkerSourceDirective>;
