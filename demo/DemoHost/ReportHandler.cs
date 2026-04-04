@@ -1,11 +1,11 @@
 using System.Text.Json;
-using Swallow.ContentSecurityPolicy.Reports;
+using Swallow.ContentSecurityPolicy.Abstractions.V2.Reports;
 
 namespace DemoHost;
 
 public sealed class ReportHandler(ILogger<ReportHandler> logger) : IReportHandler
 {
-    public Task Handle(CSPViolationReport[] violationReports, CancellationToken cancellationToken)
+    public Task Handle(ViolationReport[] violationReports, CancellationToken cancellationToken)
     {
         foreach (var report in violationReports)
         {

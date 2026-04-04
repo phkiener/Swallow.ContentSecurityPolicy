@@ -208,7 +208,7 @@ public partial class ContentSecurityPolicyBuilder
     /// the given expressions.
     /// </summary>
     /// <param name="expressions">The expressions for the <see cref="StyleSourceElementDirective"/>.</param>
-    public ContentSecurityPolicyBuilder AddStyleElementAttribute(params IEnumerable<ISourceExpression<StyleSourceElementDirective>> expressions)
+    public ContentSecurityPolicyBuilder AddStyleSourceElement(params IEnumerable<ISourceExpression<StyleSourceElementDirective>> expressions)
         => AddSpecificDirective(expressions);
 
     /// <summary>

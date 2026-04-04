@@ -1,12 +1,11 @@
 @page "/"
-@using Swallow.ContentSecurityPolicy.Http
-@inject IHttpContextAccessor HttpContextAccessor
+@using Swallow.ContentSecurityPolicy.Abstractions.V2.Feature
 
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
     <title>CSP Example</title>
-    <script src="@Assets["script-1.js"]" nonce="@HttpContextAccessor.HttpContext?.CspNonce" async></script>
+    <script src="@Assets["script-1.js"]" nonce="@HttpContext.Nonce" async></script>
     <script src="@Assets["script-2.js"]" async></script>
 
     <style>
@@ -20,3 +19,10 @@
 </ul>
 </body>
 </html>
+
+@code {
+
+    [CascadingParameter]
+    public required HttpContext HttpContext { get; set; }
+
+}

@@ -11,7 +11,7 @@ public static class Allow
     // TODO: This can probably be easily source-generated.
 
     /// <inheritdoc cref="Model.SourceExpressions.DenyAll"/>
-    public static DenyAll None { get; } = new();
+    public static DenyAll Nothing { get; } = new();
 
     /// <inheritdoc cref="Model.SourceExpressions.Hash"/>
     public static Hash Hash(Hash.Algorithm algorithm, string hashedValue) => new(algorithm, hashedValue);
@@ -24,6 +24,9 @@ public static class Allow
 
     /// <inheritdoc cref="Model.SourceExpressions.InlineSpeculationRules"/>
     public static InlineSpeculationRules InlineSpeculationRules { get; } = new();
+
+    /// <inheritdoc cref="Model.SourceExpressions.Nonce"/>
+    public static Nonce Nonce { get; } = new();
 
     /// <inheritdoc cref="Model.SourceExpressions.ReportSample"/>
     public static ReportSample ReportSample { get; } = new();
