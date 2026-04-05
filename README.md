@@ -8,9 +8,9 @@ See [the demo host](./demo/DemoHost/Program.cs) for a simple example.
 
 Register the services:
 ```csharp
-// Register the services and add a default policy.
+// Register the services and add a fallback policy.
 builder.Services.AddContentSecurityPolicy(
-    opt => opt.SetDefaultPolicy(b => b.AddDefaultSource(Allow.Self)));
+    opt => opt.SetFallback(b => b.AddDefaultSource(Allow.Self)));
 ```
 
 Then add the middleware:

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Swallow.ContentSecurityPolicy;
 using Swallow.ContentSecurityPolicy.Abstractions;
+using Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 using Swallow.ContentSecurityPolicy.Abstractions.Feature;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning)
 builder.Services.AddRazorComponents();
 builder.Services.AddContentSecurityPolicy(static opt =>
 {
-    opt.SetDefaultPolicy(static b => b
+    opt.SetFallbackPolicy(static b => b
         .AddDefaultSource(Allow.Self)
         .AddScriptSource(Allow.Nonce)
         .AddStyleSourceElement(Allow.UnsafeInline)
@@ -37,9 +38,9 @@ app.MapGet("/", () => new RazorComponentResult<IndexPage>());
 app.MapGet("/nonce", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.Nonce}'"));
 
 app.MapGet("/ignored", ctx => ctx.Response.WriteAsync("I don't have a CSP."))
-    .WithMetadata(new IgnoreContentSecurityPolicyAttribute());
+    .DisableContentSecurityPolicy();
 
 app.MapGet("/locked-down", ctx => ctx.Response.WriteAsync("You can't load anything!"))
-    .WithMetadata(new ContentSecurityPolicyAttribute("Locked Down"));
+    .WithContentSecurityPolicy("Locked Down");
 
 app.Run();
