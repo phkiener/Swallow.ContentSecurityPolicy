@@ -1,65 +1,76 @@
 # Swallow.ContentSecurityPolicy
 
-A neat Content Security Policy (CSP) integration for ASP.NET Core.
+A neat Content Security Policy (CSP) integration for ASP.NET Core. Because after
+all this time, there isn't really a built-in way to do that, especially when
+working with a nonce.
 
-## Setup
+## Getting started
 
-See [the demo host](./demo/DemoHost/Program.cs) for a simple example.
+See [the demo host](./docs/demo) for full example.
 
-Register the services:
+### Register the services
+
 ```csharp
-// Register the services and add a fallback policy.
 builder.Services.AddContentSecurityPolicy(
-    opt => opt.SetFallback(b => b.AddDefaultSource(Allow.Self)));
+    opt => opt
+        .SetFallbackPolicy(b => b.AddDefaultSource(Allow.Nothing))
+        .SetDefaultPolicy(b => b.AddDefaultSource(Allow.Self, Allow.Nonce))
+        .AddPolicy("Special", b => b.AddDefaultSource(Allow.UnsafeInline))
+    );
 ```
 
-Then add the middleware:
+The policies are similar to authorization policies:
+- The *fallback policy* is used when an endpoint does not define a policy
+- The *default policy* is used when an endpoint defines a policy but does not require a _specific_ policy
+- A specific policy is used when an endpoint refers to that policy by its name
+
+### Add the middleware
+
 ```csharp
 app.UseContentSecurityPolicy();
 ```
 
-And done!
+It should be placed after `UseRouting()` because the middleware tries to read
+metadata from the resolved endpoint. If you do not specify `UseRouting()` by
+yourself, it doesn't matter - you'll be safe!
 
-### Use a nonce
+### Apply a policy to an endpoint
 
-If your CSP contains a *nonce*, you can access that nonce via the `HttpContext`:
+```csharp
+app.MapGet("/", () => "I have the fallback policy");
+app.MapGet("/default", () => "I have the default policy").WithContentSecurityPolicy();
+app.MapGet("/specific", () => "I have a specific policy").WithContentSecurityPolicy("Special");
+app.MapGet("/ignored", () => "I don't have any policy").DisableContentSecurityPolicy();
+```
+
+You can also use the attributes directly: `ContentSecurityPolicyAttribute` and `DisableContentSecurityPolicyAttribute`.
+
+While you *can* add multiple `WithContentSecurityPolicy()`-calls to a single endpoint,
+only the last one is considered. As soon as you use `DisableContentSecurityPolicy()`,
+all other calls to `WithContentSecurityPolicy()` are ignored; this is very similar
+to `[Authorize]` and `[AllowAnonymous]`.
+
+### Use a *nonce*
+
+If your policy is configured to allow a *nonce*, you can access that nonce via the `HttpContext`:
 
 ```csharp
 builder.Services.AddContentSecurityPolicy(
-    opt => opt.SetDefaultPolicy(b => b.AddDefaultSource(Allow.Nonce)));
+    opt => opt.SetFallbackPolicy(b => b.AddDefaultSource(Allow.Nonce)));
 
 // ... later
 app.UseContentSecurityPolicy();
 app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.Nonce}'"));
 ```
 
-### Use a specific policy per endpoint
-
-Similar to authorization policies, you can configure multiple different content
-security policies and choose which one to apply based on the
-`ContentSecurityPolicyAttribute`. You can even prevent the default policy from
-being applied by using the `IgnoreContentSecurityPolicyAttribute`.
-
-```csharp
-builder.Services.AddContentSecurityPolicy(opt => opt
-        .SetDefaultPolicy(b => b.AddDefaultSource(Allow.Nothing))
-        .AddPolicy("nonce", b => b.AddDefaultSource(Allow.Nonce))
-        .AddPolicy("self", b => b.AddDefaultSource(Allow.Self)));
-
-app.MapGet("/", () => "I have nothing");
-app.MapGet("/nonce", () => "I have a nonce").WithMetadata(new ContentSecurityPolicyAttribute("nonce"));
-app.MapGet("/self", () => "I have self").WithMetadata(new ContentSecurityPolicyAttribute("self"));
-app.MapGet("/ignore", () => "I don't have CSP").WithMetadata(new IgnoreContentSecurityPolicyAttribute());
-```
-
 ### Reporting violations
 
 To not actually block any resources, but only send reports for resources that
-*would* be blocked, you can set `ReportOnly` on the `ContentSecurityPolicy`.
+*would* be blocked, you can set `ReportOnly` on the policy.
 
 ```csharp
 builder.Services.AddContentSecurityPolicy(opt => opt
-    .SetDefaultPolicy(b => b
+    .SetFallbackPolicy(b => b
         .AddDefaultSource(Allow.Nothing)
         .ReportOnly()));
 ```
@@ -68,7 +79,7 @@ This only makes sense when actually setting a reporting endpoint, though.
 
 ```csharp
 builder.Services.AddContentSecurityPolicy(opt => opt
-    .SetDefaultPolicy(b => b
+    .SetFallbackPolicy(b => b
         .AddDefaultSource(Allow.Nothing)
         .SendReportsTo("/reports")
         .ReportOnly()));
@@ -83,7 +94,7 @@ automatically wire up the handler to the `report-to` directive, you can use
 
 ```csharp
 builder.Services.AddContentSecurityPolicy(opt => opt
-    .SetDefaultPolicy(b => b
+    .SetFallbackPolicy(b => b
         .AddDefaultSource(Allow.Nothing)
         .SendReportsToLocal()
         .ReportOnly()));
@@ -92,11 +103,11 @@ builder.Services.AddContentSecurityPolicyReportHandler<MyHandler>();
 // ...or builder.Services.AddScoped<IReportHandler, MyHandler>()
 ```
 
-The URL of the reporting endpoint is resolved automatically... once you map
-the endpoint:
+The URL of the reporting endpoint is resolved automatically once you map the
+endpoint:
 
 ```csharp
-// Handles reports on _csp/report by default
+// Handles reports on _framework/content-security-policy/violations by default
 app.MapContentSecurityPolicyViolations();
 
 // You can also pass in a custom route if you want:
@@ -119,5 +130,4 @@ public sealed class ReportHandler(ILogger<ReportHandler> logger) : IReportHandle
         return Task.CompletedTask;
     }
 }
-
 ```

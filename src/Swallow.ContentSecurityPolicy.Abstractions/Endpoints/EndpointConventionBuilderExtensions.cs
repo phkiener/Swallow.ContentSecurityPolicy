@@ -10,12 +10,12 @@ public static class EndpointConventionBuilderExtensions
     extension(IEndpointConventionBuilder endpoint)
     {
         /// <summary>
-        /// Apply a <see cref="IgnoreContentSecurityPolicyAttribute"/>, causing it
+        /// Apply a <see cref="DisableContentSecurityPolicyAttribute"/>, causing it
         /// to ignore the default content security policy.
         /// </summary>
         public IEndpointConventionBuilder DisableContentSecurityPolicy()
         {
-            return endpoint.WithMetadata(new IgnoreContentSecurityPolicyAttribute());
+            return endpoint.WithMetadata(new DisableContentSecurityPolicyAttribute());
         }
 
         /// <summary>
