@@ -2,11 +2,24 @@
 
 A neat Content Security Policy (CSP) integration for ASP.NET Core. Because after
 all this time, there isn't really a built-in way to do that, especially when
-working with a nonce.
+working with a nonce. AOT-compatible, by the way!
 
 ## Getting started
 
 See [the demo host](./docs/demo) for full example.
+
+### Reference the package
+
+The packages are available on [NuGet](https://www.nuget.org/packages/Swallow.ContentSecurityPolicy/1.0.0).
+
+```xml
+<ItemGroup>
+  <PackageReference Include="Swallow.ContentSecurityPolicy" Version="1.0.0" />
+
+  <!-- Or, if you don't need to set up a host project: -->
+  <PackageReference Include="Swallow.ContentSecurityPolicy.Abstractions" Version="1.0.0" />
+</ItemGroup>
+```
 
 ### Register the services
 
