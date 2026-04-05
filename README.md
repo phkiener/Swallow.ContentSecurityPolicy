@@ -9,8 +9,8 @@ See [the demo host](./demo/DemoHost/Program.cs) for a simple example.
 Register the services:
 ```csharp
 // Register the services and add a default policy.
-builder.Services.AddContentSecurityPolicy()
-    .SetDefaultPolicy(new ContentSecurityPolicy());
+builder.Services.AddContentSecurityPolicy(
+    opt => opt.SetDefaultPolicy(b => b.AddDefaultSource(Allow.Self)));
 ```
 
 Then add the middleware:
@@ -25,26 +25,31 @@ And done!
 If your CSP contains a *nonce*, you can access that nonce via the `HttpContext`:
 
 ```csharp
-var defaultPolicy = new ContentSecurityPolicy { DefaultSource = [Nonce.Instance] };
-builder.Services.AddContentSecurityPolicy()
-    .SetDefaultPolicy(new ContentSecurityPolicy());
+builder.Services.AddContentSecurityPolicy(
+    opt => opt.SetDefaultPolicy(b => b.AddDefaultSource(Allow.Nonce)));
 
 // ... later
 app.UseContentSecurityPolicy();
-app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.CspNonce}'"));
+app.MapGet("/", ctx => ctx.Response.WriteAsync($"The nonce is '{ctx.Nonce}'"));
 ```
 
-### Modify the CSP per request
+### Use a specific policy per endpoint
 
-The `HttpContext` exposes the current policy; this policy can be modified as long
-as the headers have not been sent yet.
+Similar to authorization policies, you can configure multiple different content
+security policies and choose which one to apply based on the
+`ContentSecurityPolicyAttribute`. You can even prevent the default policy from
+being applied by using the `IgnoreContentSecurityPolicyAttribute`.
 
 ```csharp
-app.MapGet("/deny-all", ctx =>
-{
-    ctx.ContentSecurityPolicy?.DefaultSource = [DenyAll.Instance];
-    return ctx.Response.WriteAsync("You can't load anything!");
-});
+builder.Services.AddContentSecurityPolicy(opt => opt
+        .SetDefaultPolicy(b => b.AddDefaultSource(Allow.Nothing))
+        .AddPolicy("nonce", b => b.AddDefaultSource(Allow.Nonce))
+        .AddPolicy("self", b => b.AddDefaultSource(Allow.Self)));
+
+app.MapGet("/", () => "I have nothing");
+app.MapGet("/nonce", () => "I have a nonce").WithMetadata(new ContentSecurityPolicyAttribute("nonce"));
+app.MapGet("/self", () => "I have self").WithMetadata(new ContentSecurityPolicyAttribute("self"));
+app.MapGet("/ignore", () => "I don't have CSP").WithMetadata(new IgnoreContentSecurityPolicyAttribute());
 ```
 
 ### Reporting violations
@@ -53,64 +58,66 @@ To not actually block any resources, but only send reports for resources that
 *would* be blocked, you can set `ReportOnly` on the `ContentSecurityPolicy`.
 
 ```csharp
-builder.Services.AddContentSecurityPolicy()
-    .SetPolicy(new ContentSecurityPolicy
-    {
-        DefaultSource = [new Nonce()],
-        StyleSource = [new Nonce()],
-        ReportOnly = true // <- this one!
-    })
+builder.Services.AddContentSecurityPolicy(opt => opt
+    .SetDefaultPolicy(b => b
+        .AddDefaultSource(Allow.Nothing)
+        .ReportOnly()));
 ```
 
-This only makes sense when actually setting a reporting endpoint.
+This only makes sense when actually setting a reporting endpoint, though.
 
 ```csharp
-builder.Services.AddContentSecurityPolicy()
-    .SetPolicy(new ContentSecurityPolicy
-    {
-        DefaultSource = [new Nonce()],
-        StyleSource = [new Nonce()],
-        ReportOnly = true,
-        ReportingEndpoint = "/report-csp" // <- this one!
-    })
+builder.Services.AddContentSecurityPolicy(opt => opt
+    .SetDefaultPolicy(b => b
+        .AddDefaultSource(Allow.Nothing)
+        .SendReportsTo("/reports")
+        .ReportOnly()));
 ```
 
 ### Handling violation reports
 
-You can also specify a handler to process any violation reports:
+Most of the time, you want to handle the CSP violations in the same host that
+defines them. To do that, you can implement one (or more) `IReportHandler`s. To
+automatically wire up the handler to the `report-to` directive, you can use
+`SendReportsToLocal`:
 
 ```csharp
-builder.Services.AddContentSecurityPolicy()
-    .SetPolicy(new ContentSecurityPolicy { DefaultSource = [new Nonce()], StyleSource = [new Nonce()], ReportOnly = true })
-    .UseReportHandler<ReportHandler>(); // <- this one!
+builder.Services.AddContentSecurityPolicy(opt => opt
+    .SetDefaultPolicy(b => b
+        .AddDefaultSource(Allow.Nothing)
+        .SendReportsToLocal()
+        .ReportOnly()));
+
+builder.Services.AddContentSecurityPolicyReportHandler<MyHandler>();
+// ...or builder.Services.AddScoped<IReportHandler, MyHandler>()
 ```
 
-Note that you don't have to specify the `ReportingEndpoint`; it will be resolved automatically,
-provided you register a matching endpoint:
+The URL of the reporting endpoint is resolved automatically... once you map
+the endpoint:
 
 ```csharp
 // Handles reports on _csp/report by default
-app.MapContentSecurityPolicyReports();
+app.MapContentSecurityPolicyViolations();
 
 // You can also pass in a custom route if you want:
-app.MapContentSecurityPolicyReports(route: "_reports/csp/violation");
+app.MapContentSecurityPolicyViolations(route: "custom-report-route");
 ```
-
-This uses the `IHttpContextAccessor` to retrieve the current `HttpContext` to
-generate the correct URL, but it also works without it. You can also generate
-the URL yourself by calling `LinkGenerator.GetPathByName` and passing
-`ConentSecurityPolicy.ReportingEndpointName` as the endpoint name.
 
 The report handler itself can be fairly simple:
 
 ```csharp
 public sealed class ReportHandler(ILogger<ReportHandler> logger) : IReportHandler
 {
-    public Task Handle(CSPViolationReport violationReport, CancellationToken cancellationToken)
+    public Task Handle(ViolationReport[] violationReports, CancellationToken cancellationToken)
     {
-        logger.LogWarning("CSP Violation {Report}", violationReport);
+        foreach (var report in violationReports)
+        {
+            // Just log them as warnings.
+            logger.LogWarning("CSP Violation {Report}", JsonSerializer.Serialize(report));
+        }
 
         return Task.CompletedTask;
     }
 }
+
 ```
