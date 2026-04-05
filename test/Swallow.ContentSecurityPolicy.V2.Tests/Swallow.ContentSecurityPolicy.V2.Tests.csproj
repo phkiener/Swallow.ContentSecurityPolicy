@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Swallow.ContentSecurityPolicy.Abstractions.V2/Swallow.ContentSecurityPolicy.Abstractions.V2.csproj" />
     <ProjectReference Include="../../src/Swallow.ContentSecurityPolicy.V2/Swallow.ContentSecurityPolicy.V2.csproj" />
-    <ProjectReference Include="../TestHost/TestHost.csproj" />
+    <ProjectReference Include="../TestHost.V2/TestHost.V2.csproj" />
   </ItemGroup>
 
 </Project>

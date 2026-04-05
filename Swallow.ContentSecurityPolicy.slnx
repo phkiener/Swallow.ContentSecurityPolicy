@@ -21,6 +21,7 @@
   <Folder Name="/Tests/">
     <Project Path="test/Swallow.ContentSecurityPolicy.Tests/Swallow.ContentSecurityPolicy.Tests.csproj" />
     <Project Path="test/Swallow.ContentSecurityPolicy.V2.Tests/Swallow.ContentSecurityPolicy.V2.Tests.csproj" />
+    <Project Path="test/TestHost.V2/TestHost.V2.csproj" />
     <Project Path="test/TestHost/TestHost.csproj" />
   </Folder>
 </Solution>

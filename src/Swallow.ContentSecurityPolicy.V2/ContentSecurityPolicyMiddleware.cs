@@ -34,6 +34,7 @@ public sealed class ContentSecurityPolicyMiddleware(
         var policy = specificContentSecurityPolicy is null ? policyResolver.DefaultPolicy() : policyResolver.GetPolicy(specificContentSecurityPolicy.Name);
         if (policy is null)
         {
+            // TODO: Log warning when policy is defined but not found (?)
             return next(context);
         }
 
