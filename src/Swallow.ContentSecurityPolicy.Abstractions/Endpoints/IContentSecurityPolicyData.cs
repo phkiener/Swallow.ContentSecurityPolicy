@@ -1,4 +1,4 @@
-namespace Swallow.ContentSecurityPolicy.Abstractions.Metadata;
+namespace Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 
 /// <summary>
 /// Defines the <see cref="ContentSecurityPolicyDefinition"/> that should apply to this endpoint.

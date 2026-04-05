@@ -1,4 +1,5 @@
 using Swallow.ContentSecurityPolicy.Abstractions;
+using Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 using Swallow.ContentSecurityPolicy.Abstractions.Feature;
 
 namespace Swallow.ContentSecurityPolicy.Tests;
@@ -63,7 +64,7 @@ public sealed class ResponseHeadersTest : EndToEndTestBase
             app =>
             {
                 app.UseContentSecurityPolicy();
-                app.MapGet("/specific", () => "Hello World").WithMetadata(new ContentSecurityPolicyAttribute("Specific"));
+                app.MapGet("/specific", () => "Hello World").WithContentSecurityPolicy("Specific");
             });
 
         var response = await client.GetAsync("/specific");
@@ -83,7 +84,7 @@ public sealed class ResponseHeadersTest : EndToEndTestBase
             app =>
             {
                 app.UseContentSecurityPolicy();
-                app.MapGet("/specific", () => "Hello World").WithMetadata(new ContentSecurityPolicyAttribute("i don't exist"));
+                app.MapGet("/specific", () => "Hello World").WithContentSecurityPolicy("I don't exist");
             });
 
         var response = await client.GetAsync("/specific");
@@ -101,7 +102,7 @@ public sealed class ResponseHeadersTest : EndToEndTestBase
             app =>
             {
                 app.UseContentSecurityPolicy();
-                app.MapGet("/ignore", () => "Hello World").WithMetadata(new IgnoreContentSecurityPolicyAttribute());
+                app.MapGet("/ignore", () => "Hello World").WithoutContentSecurityPolicy();
             });
 
         var response = await client.GetAsync("/ignore");

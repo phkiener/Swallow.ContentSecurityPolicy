@@ -1,4 +1,4 @@
-using Swallow.ContentSecurityPolicy.Abstractions.Metadata;
+using Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions;
 

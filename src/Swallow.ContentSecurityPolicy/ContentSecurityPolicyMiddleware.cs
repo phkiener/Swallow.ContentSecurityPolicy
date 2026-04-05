@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Swallow.ContentSecurityPolicy.Abstractions;
+using Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 using Swallow.ContentSecurityPolicy.Abstractions.Feature;
-using Swallow.ContentSecurityPolicy.Abstractions.Metadata;
 using Swallow.ContentSecurityPolicy.Reports;
 
 namespace Swallow.ContentSecurityPolicy;

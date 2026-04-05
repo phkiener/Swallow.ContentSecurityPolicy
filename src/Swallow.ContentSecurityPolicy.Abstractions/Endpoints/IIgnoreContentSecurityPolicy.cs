@@ -1,4 +1,4 @@
-namespace Swallow.ContentSecurityPolicy.Abstractions.Metadata;
+namespace Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 
 /// <summary>
 /// Marker interface to skip including the default <see cref="ContentSecurityPolicyDefinition"/> if
