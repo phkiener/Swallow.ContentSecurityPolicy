@@ -8,8 +8,8 @@ namespace Swallow.ContentSecurityPolicy.Abstractions;
 /// </summary>
 /// <seealso cref="IgnoreContentSecurityPolicyAttribute"/>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-public sealed class ContentSecurityPolicyAttribute(string name) : Attribute, IContentSecurityPolicyData
+public sealed class ContentSecurityPolicyAttribute(string? name) : Attribute, IContentSecurityPolicyData
 {
     /// <inheritdoc />
-    public string Name { get; } = name;
+    public string? Name { get; } = name;
 }

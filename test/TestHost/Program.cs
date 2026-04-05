@@ -7,5 +7,4 @@ var app = builder.Build();
 var appBuilder = app.Services.GetRequiredService<Action<WebApplication>>();
 appBuilder(app);
 
-app.Map("/", () => "Hello World");
 app.Run();

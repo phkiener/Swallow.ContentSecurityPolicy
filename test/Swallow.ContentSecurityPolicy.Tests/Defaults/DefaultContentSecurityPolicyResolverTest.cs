@@ -11,6 +11,12 @@ public sealed class DefaultContentSecurityPolicyResolverTest
     private DefaultContentSecurityPolicyResolver Resolver => new(new OptionsWrapper<ContentSecurityPolicyOptions>(options));
 
     [Test]
+    public async Task ReturnsNull_WhenNoFallbackPolicyPresent()
+    {
+        await Assert.That(Resolver.FallbackPolicy()).IsNull();
+    }
+
+    [Test]
     public async Task ReturnsNull_WhenNoDefaultPolicyPresent()
     {
         await Assert.That(Resolver.DefaultPolicy()).IsNull();
@@ -20,6 +26,15 @@ public sealed class DefaultContentSecurityPolicyResolverTest
     public async Task ReturnsNull_WhenNoNamedPolicyPresent()
     {
         await Assert.That(Resolver.GetPolicy("Foobar")).IsNull();
+    }
+
+    [Test]
+    public async Task ReturnsFallbackPolicy_WhenConfigured()
+    {
+        options.SetFallbackPolicy(b => b.AddDefaultSource(Allow.Nothing));
+
+        var policy = await Assert.That(Resolver.FallbackPolicy()).IsNotNull();
+        await Assert.That(policy.DefaultSource?.Expressions).HasSingleItem(e => e.Equals(Allow.Nothing));
     }
 
     [Test]

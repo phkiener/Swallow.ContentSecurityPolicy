@@ -8,9 +8,38 @@ public sealed class ContentSecurityPolicyOptions
     private readonly Dictionary<string, ContentSecurityPolicyDefinition> policies = [];
 
     /// <summary>
-    /// The default policy that should be applied if no other policy is configured.
+    /// The default policy that should be applied to every request.
+    /// </summary>
+    public ContentSecurityPolicyDefinition? FallbackPolicy { get; set; }
+
+    /// <summary>
+    /// The default policy that should be applied if no specific policy is configured.
     /// </summary>
     public ContentSecurityPolicyDefinition? DefaultPolicy { get; set; }
+
+    /// <summary>
+    /// Set the <see cref="FallbackPolicy"/> to the given policy.
+    /// </summary>
+    /// <param name="fallbackPolicy">The new <see cref="ContentSecurityPolicyDefinition"/> to set as default policy.</param>
+    /// <seealso cref="SetFallbackPolicy(Action{ContentSecurityPolicyBuilder})"/>
+    public ContentSecurityPolicyOptions SetFallbackPolicy(ContentSecurityPolicyDefinition? fallbackPolicy)
+    {
+        FallbackPolicy = fallbackPolicy;
+        return this;
+    }
+
+    /// <summary>
+    /// Set the <see cref="FallbackPolicy"/> to the policy configured by <paramref name="builder"/>.
+    /// </summary>
+    /// <param name="builder">Configuration of the <see cref="ContentSecurityPolicyBuilder"/>.</param>
+    /// <seealso cref="SetFallbackPolicy(ContentSecurityPolicyDefinition)"/>
+    public ContentSecurityPolicyOptions SetFallbackPolicy(Action<ContentSecurityPolicyBuilder> builder)
+    {
+        var policyBuilder = new ContentSecurityPolicyBuilder();
+        builder(policyBuilder);
+
+        return SetFallbackPolicy(policyBuilder.Build());
+    }
 
     /// <summary>
     /// Resolve a policy that has been added using <see cref="AddPolicy(string, ContentSecurityPolicyDefinition)"/>.

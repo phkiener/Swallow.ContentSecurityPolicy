@@ -1,16 +1,16 @@
 namespace Swallow.ContentSecurityPolicy.Abstractions.Endpoints;
 
 /// <summary>
-/// Defines the <see cref="ContentSecurityPolicyDefinition"/> that should apply to this endpoint.
+/// Defines that a <see cref="ContentSecurityPolicyDefinition"/> should apply to this endpoint.
 /// </summary>
 /// <remarks>
-/// If this metadata is not present, the default policy will be used instead.
+/// If this metadata is not present, the fallback policy will be used.
 /// </remarks>
 /// <seealso cref="IIgnoreContentSecurityPolicy"/>
 public interface IContentSecurityPolicyData
 {
     /// <summary>
-    /// Name of the policy to apply.
+    /// Name of the specific policy to apply, if any. If not set, the default policy will apply.
     /// </summary>
-    string Name { get; }
+    string? Name { get; }
 }

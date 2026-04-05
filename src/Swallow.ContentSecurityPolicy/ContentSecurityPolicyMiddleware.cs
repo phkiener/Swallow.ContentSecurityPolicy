@@ -11,10 +11,6 @@ namespace Swallow.ContentSecurityPolicy;
 /// A middleware that registers the <see cref="IContentSecurityPolicyFeature"/> on the <see cref="HttpContext"/>
 /// and ensures that the content security policy is written to the response - if applicable.
 /// </summary>
-/// <remarks>
-/// The <see cref="IContentSecurityPolicyFeature"/> is <em>only</em> registered if a <see cref="ContentSecurityPolicyDefinition"/>
-/// was resolved for the current endpoint.
-/// </remarks>
 public sealed class ContentSecurityPolicyMiddleware(
     IContentSecurityPolicyResolver policyResolver,
     IContentSecurityPolicyHeaderWriter headerWriter,
@@ -24,19 +20,7 @@ public sealed class ContentSecurityPolicyMiddleware(
     /// <inheritdoc/>
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var ignoreContentSecurityPolicy = context.GetEndpoint()?.Metadata.GetMetadata<IIgnoreContentSecurityPolicy>();
-        if (ignoreContentSecurityPolicy is not null)
-        {
-            return next(context);
-        }
-
-        var specificContentSecurityPolicy = context.GetEndpoint()?.Metadata.GetMetadata<IContentSecurityPolicyData>();
-        var policy = specificContentSecurityPolicy is null ? policyResolver.DefaultPolicy() : policyResolver.GetPolicy(specificContentSecurityPolicy.Name);
-        if (policy is null)
-        {
-            // TODO: Log warning when policy is defined but not found (?)
-            return next(context);
-        }
+        var policy = ResolvePolicy(context.GetEndpoint());
 
         var nonce = nonceGenerator.Generate(context);
         var feature = new ContentSecurityPolicyFeature(context, linkGenerator, headerWriter, nonce, policy);
@@ -45,6 +29,26 @@ public sealed class ContentSecurityPolicyMiddleware(
         context.Response.OnStarting(OnStartingCallback, state: feature);
 
         return next(context);
+    }
+
+    private ContentSecurityPolicyDefinition? ResolvePolicy(Endpoint? endpoint)
+    {
+        var ignorePolicy = endpoint?.Metadata.GetMetadata<IIgnoreContentSecurityPolicy>();
+        if (ignorePolicy is not null)
+        {
+            return null;
+        }
+
+        var policyMetadata = endpoint?.Metadata.GetMetadata<IContentSecurityPolicyData>();
+        if (policyMetadata?.Name is not null)
+        {
+            var policy = policyResolver.GetPolicy(policyMetadata.Name);
+            return policy ?? throw new InvalidOperationException($"The content security policy {policyMetadata.Name} was configured for the endpoint, but couldn't be resolved.");
+        }
+
+        return policyMetadata is not null
+            ? policyResolver.DefaultPolicy()
+            : policyResolver.FallbackPolicy();
     }
 
     private static Task OnStartingCallback(object state)
@@ -60,10 +64,15 @@ public sealed class ContentSecurityPolicyMiddleware(
         LinkGenerator linkGenerator,
         IContentSecurityPolicyHeaderWriter headerWriter,
         string nonce,
-        ContentSecurityPolicyDefinition policy) : IContentSecurityPolicyFeature
+        ContentSecurityPolicyDefinition? policy) : IContentSecurityPolicyFeature
     {
         public void WriteHeaders()
         {
+            if (Policy is null)
+            {
+                return;
+            }
+
             var reportingUri = linkGenerator.GetPathByName(
                 httpContext: httpContext,
                 pathBase: httpContext.Request.PathBase,
@@ -74,6 +83,6 @@ public sealed class ContentSecurityPolicyMiddleware(
         }
 
         public string Nonce { get; } = nonce;
-        public ContentSecurityPolicyDefinition Policy { get; } = policy;
+        public ContentSecurityPolicyDefinition? Policy { get; } = policy;
     }
 }

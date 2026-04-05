@@ -11,6 +11,12 @@ namespace Swallow.ContentSecurityPolicy.Defaults;
 public sealed class DefaultContentSecurityPolicyResolver(IOptions<ContentSecurityPolicyOptions> options) : IContentSecurityPolicyResolver
 {
     /// <inheritdoc />
+    public ContentSecurityPolicyDefinition? FallbackPolicy()
+    {
+        return options.Value.FallbackPolicy;
+    }
+
+    /// <inheritdoc />
     public ContentSecurityPolicyDefinition? DefaultPolicy()
     {
         return options.Value.DefaultPolicy;

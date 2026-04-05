@@ -7,6 +7,12 @@ namespace Swallow.ContentSecurityPolicy.Abstractions;
 public interface IContentSecurityPolicyResolver
 {
     /// <summary>
+    /// Return the fallback <see cref="ContentSecurityPolicyDefinition" />, if any.
+    /// </summary>
+    /// <returns>The fallback policy or <see langword="null"/> if it doesn't exist.</returns>
+    ContentSecurityPolicyDefinition? FallbackPolicy();
+
+    /// <summary>
     /// Return the default <see cref="ContentSecurityPolicyDefinition" />, if any.
     /// </summary>
     /// <returns>The default policy or <see langword="null"/> if it doesn't exist.</returns>

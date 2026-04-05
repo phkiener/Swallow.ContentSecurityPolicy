@@ -47,6 +47,8 @@ public sealed class ServiceProviderConfigTest
 
     private sealed class MyResolver : IContentSecurityPolicyResolver
     {
+        public ContentSecurityPolicyDefinition? FallbackPolicy() => null;
+
         public ContentSecurityPolicyDefinition? DefaultPolicy() => null;
 
         public ContentSecurityPolicyDefinition? GetPolicy(string name) => null;
