@@ -1,9 +1,9 @@
 using DemoHost;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Swallow.ContentSecurityPolicy.Abstractions.V2;
-using Swallow.ContentSecurityPolicy.Abstractions.V2.Feature;
-using Swallow.ContentSecurityPolicy.V2;
+using Swallow.ContentSecurityPolicy;
+using Swallow.ContentSecurityPolicy.Abstractions;
+using Swallow.ContentSecurityPolicy.Abstractions.Feature;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.SetMinimumLevel(LogLevel.Warning)

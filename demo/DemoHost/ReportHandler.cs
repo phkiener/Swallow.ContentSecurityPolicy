@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Swallow.ContentSecurityPolicy.Abstractions.V2.Reports;
+using Swallow.ContentSecurityPolicy.Abstractions.Reports;
 
 namespace DemoHost;
 

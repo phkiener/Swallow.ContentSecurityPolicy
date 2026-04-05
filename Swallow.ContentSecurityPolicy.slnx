@@ -13,11 +13,11 @@
   </Folder>
   <Folder Name="/Library/">
     <File Path="src\Directory.Build.props" />
-    <Project Path="src/Swallow.ContentSecurityPolicy.Abstractions.V2/Swallow.ContentSecurityPolicy.Abstractions.V2.csproj" />
-    <Project Path="src/Swallow.ContentSecurityPolicy.V2/Swallow.ContentSecurityPolicy.V2.csproj" />
+    <Project Path="src\Swallow.ContentSecurityPolicy.Abstractions\Swallow.ContentSecurityPolicy.Abstractions.csproj" />
+    <Project Path="src\Swallow.ContentSecurityPolicy\Swallow.ContentSecurityPolicy.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="test/Swallow.ContentSecurityPolicy.V2.Tests/Swallow.ContentSecurityPolicy.V2.Tests.csproj" />
-    <Project Path="test/TestHost.V2/TestHost.V2.csproj" />
+    <Project Path="test\Swallow.ContentSecurityPolicy.Tests\Swallow.ContentSecurityPolicy.Tests.csproj" />
+    <Project Path="test\TestHost\TestHost.csproj" />
   </Folder>
 </Solution>
