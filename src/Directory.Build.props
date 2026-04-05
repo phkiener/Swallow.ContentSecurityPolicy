@@ -27,7 +27,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags>aspnetcore;csp;content-security-policy;</PackageTags>
+    <PackageTags>aspnetcore;csp;content-security-policy;aot;aot-compatible;</PackageTags>
     <Description>Convenient integration for a Content Security Policy (CSP) in your ASP.NET host.</Description>
 
     <RepositoryType>git</RepositoryType>
