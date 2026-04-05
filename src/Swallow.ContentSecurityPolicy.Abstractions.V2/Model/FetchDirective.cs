@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Swallow.ContentSecurityPolicy.Abstractions.V2.Model;
 
@@ -52,8 +53,10 @@ public abstract class FetchDirective<T> : Directive, IFetchDirective, IEnumerabl
     }
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     IEnumerator<ISourceExpression<T>> IEnumerable<ISourceExpression<T>>.GetEnumerator() => sourceExpressions.GetEnumerator();
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator() => sourceExpressions.GetEnumerator();
 }

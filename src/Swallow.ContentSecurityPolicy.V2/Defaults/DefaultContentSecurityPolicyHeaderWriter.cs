@@ -14,6 +14,11 @@ public sealed class DefaultContentSecurityPolicyHeaderWriter(ILogger<DefaultCont
     /// <inheritdoc />
     public void WriteTo(IHeaderDictionary headers, ContentSecurityPolicyDefinition policy, ContentSecurityPolicyWriterContext context)
     {
+        if (policy.Directives is [])
+        {
+            return;
+        }
+
         AddReportingEndpointsHeader(headers, policy, context.LocalReportingUri);
 
         var targetHeader = policy.ReportOnly ? HeaderNames.ContentSecurityPolicyReportOnly : HeaderNames.ContentSecurityPolicy;
@@ -43,7 +48,10 @@ public sealed class DefaultContentSecurityPolicyHeaderWriter(ILogger<DefaultCont
     {
         if (directive is IFetchDirective { Expressions: var sourceExpressions })
         {
-            var expressions = sourceExpressions.Select(e => FormatExpression(e, nonce));
+            var expressions = sourceExpressions
+                .DefaultIfEmpty(Allow.Nothing)
+                .Select(e => FormatExpression(e, nonce));
+
             return $"{DirectiveName(directive)} {string.Join(' ', expressions)}";
         }
 
