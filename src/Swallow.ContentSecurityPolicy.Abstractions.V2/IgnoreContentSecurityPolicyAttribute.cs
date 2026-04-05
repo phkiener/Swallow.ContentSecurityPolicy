@@ -11,8 +11,4 @@ namespace Swallow.ContentSecurityPolicy.Abstractions.V2;
 /// </remarks>
 /// <seealso cref="ContentSecurityPolicyAttribute"/>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-public sealed class IgnoreContentSecurityPolicyAttribute : Attribute, IIgnoreContentSecurityPolicy
-{
-    /// <inheritdoc />
-    public override string ToString() => "Ignore Content Security Policy";
-}
+public sealed class IgnoreContentSecurityPolicyAttribute : Attribute, IIgnoreContentSecurityPolicy;

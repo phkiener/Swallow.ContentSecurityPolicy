@@ -25,12 +25,6 @@ public static class ViolationReportHandler
         {
             context.Response.StatusCode = StatusCodes.Status200OK;
 
-            if (reportHandlers is [])
-            {
-                logger.LogWarning("CSP violations are being handled, but no {Type} is registered.", nameof(IReportHandler));
-                return;
-            }
-
             if (context.Request.ContentType is not "application/reports+json")
             {
                 context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
@@ -44,6 +38,12 @@ public static class ViolationReportHandler
                 var violations = jsonElement.ValueKind is JsonValueKind.Array
                     ? jsonElement.Deserialize(ViolationReportSourceGenerationContext.Default.ViolationReportArray)
                     : [jsonElement.Deserialize(ViolationReportSourceGenerationContext.Default.ViolationReport)];
+
+                if (reportHandlers is [])
+                {
+                    logger.LogWarning("CSP violations are being handled, but no {Type} is registered.", nameof(IReportHandler));
+                    return;
+                }
 
                 if (violations is not (null or []))
                 {
